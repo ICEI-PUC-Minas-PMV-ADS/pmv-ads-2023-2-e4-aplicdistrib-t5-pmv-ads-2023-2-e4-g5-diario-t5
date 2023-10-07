@@ -228,8 +228,7 @@ def delete_student(id_student):
     
 @app.route('/diario/atualizar/<id_student>', methods = ['PUT'])
 def update_std(id_student):
-    """Atualiza um estudante da lista"""
-  
+    """Atualiza um estudante da lista"""  
     updated_data = request.get_json(force=True)
     up_na = updated_data['nome']
     up_su = updated_data['sobrenome']
