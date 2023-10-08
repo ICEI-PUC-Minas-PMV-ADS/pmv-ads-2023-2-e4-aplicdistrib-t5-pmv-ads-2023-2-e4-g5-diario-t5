@@ -51,7 +51,6 @@ def get_grades_subjects(materia, turma):
 
 
 @app.route('/diario/notas/')
-
 def get_list_filters():
     """1) materia=MATERIA(str)&bimestre=BIMESTRE(int) => gera todos os
     boletins para todas as turmas do bimestre de 1 matéria \n
@@ -69,6 +68,7 @@ def get_list_filters():
     filter_yea = request.args.get('ano')
     filter_per = request.args.get('bimestre')
     filter_gra = request.args.get('total')
+    filter_avg = request.args.get('media')
     
     #matéria e bimestre
     if filter_sub is not None and filter_per is not None:
@@ -134,9 +134,12 @@ def get_list_filters():
                                 INNER JOIN tabela_materias ON 
                                 tabela_avaliacao.id_materia = tabela_materias.id_materia
                                 WHERE tabela_materias.materia ='{filter_sub}' and tabela_alunos.turma = {filter_cla}
-                                """)
+                                """)   
+
+        
        
     query_l = query_l.fetchall()
+    print(query_l)
     list_l = []
     for x in query_l:
         list_l.append({
@@ -149,6 +152,36 @@ def get_list_filters():
         })
     return jsonify(data = list_l)
         
+@app.route('/diario/media/', methods = ['GET'])
+def get_mean():
+    filter_sub = request.args.get('materia')
+    filter_cla = request.args.get('turma')
+    filter_yea = request.args.get('ano')
+    filter_per = request.args.get('bimestre')
+    
+    #média de todas as turmas de uma determinada matéria
+    if filter_sub is not None and filter_cla is None and filter_per is None and filter_yea is None:  
+        query_l = cursor.execute(f"""
+                                 SELECT materia, turma, AVG(tabela_avaliacao.total)
+                                 FROM tabela_avaliacao INNER JOIN tabela_materias
+                                 ON tabela_avaliacao.id_materia = 
+                                 tabela_materias.id_materia where materia = '{filter_sub}'
+                                 GROUP BY materia, turma                                
+                                 """)        
+    query_l = query_l.fetchall()
+    print(query_l)
+    list_l = []
+    for x in query_l:
+        list_l.append({
+            'materia': x[0],
+            'turma': x[1],
+            'media': x[2],
+        })
+    return jsonify(data = list_l) 
+
+@app.route('/diario/notas/inserir/', methods = ['POST'])
+def post_grades():
+    
         
     
     
