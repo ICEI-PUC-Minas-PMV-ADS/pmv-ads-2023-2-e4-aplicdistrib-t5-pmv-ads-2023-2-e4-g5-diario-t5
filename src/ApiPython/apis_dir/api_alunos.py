@@ -17,9 +17,7 @@ class Student(BaseModel):
     level: str 
     age: int
     cpf: str
-    id: int     
-
-
+    id: int
 data_for_connection = (
     "Driver={SQL Server Native Client RDA 11.0};"
     "Server=DESKTOP-1698A6Q\SQLEXPRESS;"
@@ -53,8 +51,10 @@ def list_all_students():
             "nivel_ensino": x[4],
             "idade": x[5], 
             "cpf": x[6],
-            "id" : x[7],
-            "turma": x[8]
+            "turma": x[7],
+            "id_aluno" : x[8],
+            "status_aluno": x[9]
+
 
         })
     return jsonify(message = "Lista de todos os alunos", lista_total = all_st)
@@ -74,10 +74,11 @@ def list_student_by_id(id_student):
             "nivel_ensino": x[4],
             "idade": x[5], 
             "cpf": x[6],
-            "turma": x[8]
+            "turma": x[7], 
+            "status_aluno": x[9]
             
         })
-        return jsonify(data = query_l, message = "Aluno solicitado")
+    return jsonify(data = query_l, message = "Aluno solicitado")
  
 @app.route('/diario/', methods = ['GET'])
 def list_filters():
@@ -90,13 +91,11 @@ def list_filters():
     filter_name = request.values.get('nome')
     filter_cpf = request.values.get('cpf')
     filter_age = request.values.get('idade')
-    filter_id = request.values.get('id')
-    
+    filter_id = request.values.get('id')  
    
     if filter_y2 is not None:
         if len(filter_y2) == 1:        
-            query_l = cursor.execute(f"SELECT * FROM tabela_alunos WHERE ano = '{filter_y}'")
-        
+            query_l = cursor.execute(f"SELECT * FROM tabela_alunos WHERE ano = '{filter_y}'")        
     if filter_y2 is not None:
         if len(filter_y2) >= 2:     
             
@@ -196,23 +195,27 @@ def list_filters():
     return jsonify(message = "Alunos por ano cursado", data = list_y)                   
            
 @app.route('/diario/inserir', methods = ['POST'])
-
 def insert_student():
     """Insere um novo estudante"""
+    
     new_std = request.get_json(force=True)
     new_na = new_std['nome']
     new_su = new_std['sobrenome']
     new_fn = new_std['nome'] + ' ' + new_std['sobrenome']
     new_gr = new_std['ano']
-    new_l = new_std['nivel_ensino']
-    new_ag = new_std['idade']
-    new_c = new_std['cpf']
+    #new_l = new_std['nivel_ensino']
+    #new_ag = new_std['idade']
+    #new_c = new_std['cpf']
     new_cl = new_std['turma']
+    new_sta  = new_std['status_aluno']
+    
+    
     cursor.execute(f""" INSERT INTO tabela_alunos (nome, sobrenome, nome_completo,
-                   ano, nivel_ensino, idade, cpf, turma)
+                   ano, turma, status_aluno)
                    VALUES ('{new_na}', '{new_su}', '{new_fn}', 
-                   '{new_gr}', '{new_l}', '{new_ag}', '{new_c}', {new_cl})
+                   '{new_gr}', {new_cl}, '{new_sta}')
                    """)
+   
     cursor.commit()
     return jsonify(message = "Aluno cadastrado com sucesso")
     
@@ -238,15 +241,17 @@ def update_std(id_student):
     up_ag = updated_data['idade']
     up_cpf = updated_data['cpf']
     up_cl = updated_data['turma']
+    up_sta = updated_data['status_aluno']
     
     cursor.execute(f"""UPDATE tabela_alunos SET nome = '{up_na}', 
                    sobrenome = '{up_su}', nome_completo = '{up_fn}',
                    ano = '{up_gr}', nivel_ensino = '{up_le}', 
-                   idade = {up_ag}, cpf = '{up_cpf}', turma = {up_cl} WHERE id_aluno ={id_student}
+                   idade = {up_ag}, cpf = '{up_cpf}', turma = {up_cl}, status_aluno = '{up_sta}'
+                   WHERE id_aluno ={id_student}
                    """)
     
     cursor.commit()
-    return(jsonify(message = "Estudante com get"))
+    return(jsonify(message = f"Estudante {up_fn} atualizado"))
     
     
 app.run(debug=True)

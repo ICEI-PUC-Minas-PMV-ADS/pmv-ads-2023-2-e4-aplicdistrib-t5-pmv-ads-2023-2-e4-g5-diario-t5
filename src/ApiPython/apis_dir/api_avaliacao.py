@@ -136,7 +136,6 @@ def get_list_filters():
                                 WHERE tabela_materias.materia ='{filter_sub}' and tabela_alunos.turma = {filter_cla}
                                 """)   
 
-        
        
     query_l = query_l.fetchall()
     print(query_l)
@@ -181,6 +180,20 @@ def get_mean():
 
 @app.route('/diario/notas/inserir/', methods = ['POST'])
 def post_grades():
+    new_gr = request.get_json(force=True)
+    new_id_std = new_gr['id_aluno']
+    new_id_sub = new_gr['id_materia']
+    new_tot = new_gr['total']
+    new_des = new_gr['descricao_at']   
+    
+    cursor.execute(f"""
+                   INSERT INTO tabela_avaliacao (id_aluno, id_materia, total, descricao_at) VALUES
+                   ({new_id_std}, {new_id_sub}, {new_tot}, '{new_des}')
+                   """)
+    cursor.commit()
+    
+    return jsonify(message = "conseguiu cadastrar a nota do aluno")
+    
     
         
     
