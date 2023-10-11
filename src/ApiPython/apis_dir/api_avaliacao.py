@@ -178,21 +178,29 @@ def get_mean():
         })
     return jsonify(data = list_l) 
 
-@app.route('/diario/notas/inserir/', methods = ['POST'])
-def post_grades():
-    new_gr = request.get_json(force=True)
-    new_id_std = new_gr['id_aluno']
-    new_id_sub = new_gr['id_materia']
-    new_tot = new_gr['total']
-    new_des = new_gr['descricao_at']   
-    
-    cursor.execute(f"""
-                   INSERT INTO tabela_avaliacao (id_aluno, id_materia, total, descricao_at) VALUES
-                   ({new_id_std}, {new_id_sub}, {new_tot}, '{new_des}')
+@app.route('/diario/notas/inserir/<materia>/<id_bimestre>/<turma>/<nota_5>/<descricao_at>',\
+           methods = ['GET', 'POST'])
+def post_grades(materia, id_bimestre, turma, nota_5, descricao_at):
+    #lembrar de tirar a matéria se não for usar
+    #filter_sub = request.args.get('materia')    
+    db_ids = cursor.execute(f"""
+    select tabela_alunos.id_aluno from tabela_alunos 
+inner join tabela_avaliacao on tabela_alunos.id_aluno = 
+tabela_avaliacao.id_aluno where exists(select id_aluno from 
+tabela_avaliacao where id_aluno = tabela_alunos.id_aluno and 
+tabela_avaliacao.turma = {turma} 
+and tabela_avaliacao.id_bimestre = {id_bimestre})""")
+    list_ids = db_ids.fetchall()
+    list_ids = [x for y in list_ids for x in y][0]
+    cursor.execute(f"""INSERT INTO tabela_avaliacao (id_aluno, id_materia, 
+                   id_bimestre, nota_5, descricao_at, turma) VALUES (
+                    {list_ids}, {materia},{id_bimestre}, {nota_5}, 
+                     '{descricao_at}', {turma}   
+                   )
                    """)
     cursor.commit()
     
-    return jsonify(message = "conseguiu cadastrar a nota do aluno")
+    return jsonify(message = "Atividade do aluno cadastrada")
     
     
         
