@@ -203,8 +203,8 @@ and tabela_avaliacao.id_bimestre = {id_bimestre})""")
     
     return jsonify(message = "Atividade do aluno cadastrada")
 
-@app.route('/teste/inserir/<id_materia>/<turma>', methods = ['GET', 'POST'])
-def post_grades_2( id_materia, turma):
+@app.route('/teste/inserir/<id_materia>/<id_bimestre>/<turma>', methods = ['GET', 'POST'])
+def post_grades_2( id_materia, id_bimestre, turma):
     #lembrar de tirar a matéria se não for usar
     #filter_sub = request.args.get('materia')    
     db_ids = cursor.execute(f"""
@@ -235,8 +235,8 @@ def post_grades_2( id_materia, turma):
         des_act =  x['descricao_at']
         gra_5 =  x['nota_5']
         cursor.execute(f"""
-                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, descricao_at, nota_5, turma)
-                    VALUES ({id_std}, {id_materia}, '{des_act}', {gra_5}, {turma})
+                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, descricao_at, nota_5, turma)
+                    VALUES ({id_std},{id_bimestre}, {id_materia}, '{des_act}', {gra_5}, {turma})
                     """)
         cursor.commit()        
     
