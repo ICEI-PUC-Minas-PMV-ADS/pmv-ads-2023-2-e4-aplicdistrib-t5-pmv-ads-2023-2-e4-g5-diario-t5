@@ -181,6 +181,7 @@ def get_mean():
 @app.route('/diario/notas/inserir/<materia>/<id_bimestre>/<turma>/<nota_5>/<descricao_at>',\
            methods = ['GET', 'POST'])
 def post_grades(materia, id_bimestre, turma, nota_5, descricao_at):
+    """insere atividade via path"""
     #lembrar de tirar a matéria se não for usar
     #filter_sub = request.args.get('materia')    
     db_ids = cursor.execute(f"""
@@ -201,12 +202,48 @@ and tabela_avaliacao.id_bimestre = {id_bimestre})""")
     cursor.commit()
     
     return jsonify(message = "Atividade do aluno cadastrada")
-    
-    
-        
-    
-    
 
-       
+@app.route('/teste/inserir/<id_materia>/<turma>', methods = ['GET', 'POST'])
+def post_grades_2( id_materia, turma):
+    #lembrar de tirar a matéria se não for usar
+    #filter_sub = request.args.get('materia')    
+    db_ids = cursor.execute(f"""
+    select id_aluno from tabela_alunos where turma = {turma}""")
+    list_ids = db_ids.fetchall()
+    list_ids = [x for y in list_ids for x in y]
+    new_act = request.get_json(force=True)
+    dic_ids = []
+    for x in list_ids:
+        dic_ids.append({
+            'id_aluno': x
+        })
+    resultado = []
+    for i in range(max(len(dic_ids), len(new_act))):
+        novo_dicionario = {}
+    
+        if i < len(dic_ids):
+            novo_dicionario.update(dic_ids[i])
+            print(f"esse é o novo dicionario no primeiro if {novo_dicionario}")
+        
+        if i < len(new_act):
+            novo_dicionario.update(new_act[i])
+            print(f"esse é o novo dicionario no segundo if {novo_dicionario}")
+        
+        resultado.append(novo_dicionario)    
+    for x in resultado:
+        id_std = x['id_aluno']
+        des_act =  x['descricao_at']
+        gra_5 =  x['nota_5']
+        cursor.execute(f"""
+                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, descricao_at, nota_5, turma)
+                    VALUES ({id_std}, {id_materia}, '{des_act}', {gra_5}, {turma})
+                    """)
+        cursor.commit()        
+    
+    return jsonify(message = "dados inseridos")
+
+
+    
+               
 app.run(debug=True)
     
