@@ -1,1 +1,1 @@
-/diario/notas/inserir/
+/diario/notas/deletar/

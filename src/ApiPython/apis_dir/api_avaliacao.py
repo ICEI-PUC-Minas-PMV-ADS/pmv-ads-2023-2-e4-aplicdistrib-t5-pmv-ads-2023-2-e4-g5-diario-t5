@@ -151,7 +151,7 @@ def get_list_filters():
         })
     return jsonify(data = list_l)
         
-@app.route('/diario/media/', methods = ['GET'])
+@app.route('/diario/notas/media/', methods = ['GET'])
 def get_mean():
     filter_sub = request.args.get('materia')
     filter_cla = request.args.get('turma')
@@ -178,35 +178,23 @@ def get_mean():
         })
     return jsonify(data = list_l) 
 
-@app.route('/diario/notas/inserir/<materia>/<id_bimestre>/<turma>/<nota_5>/<descricao_at>',\
-           methods = ['GET', 'POST'])
-def post_grades(materia, id_bimestre, turma, nota_5, descricao_at):
-    """insere atividade via path"""
-    #lembrar de tirar a matéria se não for usar
-    #filter_sub = request.args.get('materia')    
-    db_ids = cursor.execute(f"""
-    select tabela_alunos.id_aluno from tabela_alunos 
-inner join tabela_avaliacao on tabela_alunos.id_aluno = 
-tabela_avaliacao.id_aluno where exists(select id_aluno from 
-tabela_avaliacao where id_aluno = tabela_alunos.id_aluno and 
-tabela_avaliacao.turma = {turma} 
-and tabela_avaliacao.id_bimestre = {id_bimestre})""")
-    list_ids = db_ids.fetchall()
-    list_ids = [x for y in list_ids for x in y][0]
-    cursor.execute(f"""INSERT INTO tabela_avaliacao (id_aluno, id_materia, 
-                   id_bimestre, nota_5, descricao_at, turma) VALUES (
-                    {list_ids}, {materia},{id_bimestre}, {nota_5}, 
-                     '{descricao_at}', {turma}   
-                   )
-                   """)
-    cursor.commit()
-    
-    return jsonify(message = "Atividade do aluno cadastrada")
+@app.route('/diario/notas/inserir/<id_materia>/<id_bimestre>/<turma>', methods = ['GET', 'POST'])
+def post_grades( id_materia, id_bimestre, turma):
+    """insira, na ordem, id_materia(int), id_bimestre(int) e turma(int) \n
+    id_materia disponíveis:
+portugues:	1
+ingles:	2
+artes:	3
+matematica:	4
+ciencias:	5
+educacao_fisica:	6
+ensino_religioso:	7
+historia:	8
+geografia:	9    
 
-@app.route('/teste/inserir/<id_materia>/<id_bimestre>/<turma>', methods = ['GET', 'POST'])
-def post_grades_2( id_materia, id_bimestre, turma):
-    #lembrar de tirar a matéria se não for usar
-    #filter_sub = request.args.get('materia')    
+id_bimestre
+1, 2, 3, 4    
+    """   
     db_ids = cursor.execute(f"""
     select id_aluno from tabela_alunos where turma = {turma}""")
     list_ids = db_ids.fetchall()
@@ -238,12 +226,43 @@ def post_grades_2( id_materia, id_bimestre, turma):
                     INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, descricao_at, nota_5, turma)
                     VALUES ({id_std},{id_bimestre}, {id_materia}, '{des_act}', {gra_5}, {turma})
                     """)
-        cursor.commit()        
-    
+        cursor.commit()   
     return jsonify(message = "dados inseridos")
-
-
     
+@app.route('/diario/notas/atualizar/<id_avaliacao>', methods = ['PUT'])
+def update_grades(id_avaliacao):
+    """Atualiza uma atividade criada. Os campos disponíveis para atualização são:
+    id_materia(int)= portugues:	1, ingles:	2, artes:	3, matematica:	4, ciencias: 5
+    educacao_fisica: 6, ensino_religioso: 7, historia:	8, geografia:	9  
+    id_bimestre(int)= 1, 2, 3, 4 
+    nota_5(int) (em breve serão disponibilizadas todas as notas)
+    descricao_at(str)   
+    
+    """
+    up_obj = request.get_json(force=True)
+    up_per = up_obj['id_bimestre']
+    up_des = up_obj['descricao_at']
+    up_gra_5 = up_obj['nota_5']
+    up_sub = up_obj['id_materia']
+    
+    if up_per is not None and up_des is not None \
+        and up_gra_5 is not None and up_sub is not None:
+        cursor.execute(f"""UPDATE tabela_avaliacao SET id_materia = {up_sub} 
+                       id_bimestre = {up_per},
+                       descricao_at = '{up_des}', nota_5 = {up_gra_5} WHERE
+                       id_avaliacao = {id_avaliacao}
+                   """)        
+    cursor.commit()
+    return jsonify(message="Atividade atualizada")
+    
+@app.route('/diario/notas/deletar/<id_avaliacao>', methods = ['DELETE'])
+def delete_grades(id_avaliacao):
+    """Insira o id de alguma atividade e ela será apagada"""
+    cursor.execute(f"""DELETE FROM tabela_avaliacao WHERE id_avaliacao = {id_avaliacao}
+                   """)
+    cursor.commit()
+    
+    return jsonify(message=f"Atividade {id_avaliacao} apagada!")      
                
 app.run(debug=True)
     
