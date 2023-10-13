@@ -37,26 +37,4 @@ def insert_new_student(new_st):
 new_st = {"nome": "aluno_inserido_para_exemplo", 'turma': 'nono_ef', 'sobrenome': 'sobrenome do aluno'}
         
 insert_new_student(new_st)
-    
-        
-        
-        
-        
-           
-        
-
-
-
-
-# Atualize um documento na coleção.
-#collection.update_one({"name": "John"}, {"$set": {"age": 31}})
-
-# Consulte novamente para verificar a atualização.
-#updated_result = collection.find_one({"name": "John"})
-#print(updated_result)
-
-# Exclua um documento na coleção.
-#collection.delete_one({"name": "John"})
-
-# Certifique-se de fechar a conexão quando terminar.
 client.close()

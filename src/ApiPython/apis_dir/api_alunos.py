@@ -63,22 +63,23 @@ def list_all_students():
 def list_student_by_id(id_student):
     "Lista os dados de um estudante pelo id"
     db = cursor.execute(f"SELECT * FROM tabela_alunos where id_aluno = ?", (id_student) )
-    query_data = db.fetchall()
-    query_l = []
-    for x in query_data:
-        query_l.append({
-            "nome": x[0],
-            "sobrenome": x[1],
-            "nome_completo": x[2],
-            "ano": x[3],
-            "nivel_ensino": x[4],
-            "idade": x[5], 
-            "cpf": x[6],
-            "turma": x[7], 
-            "status_aluno": x[9]
+    query_data = db.fetchone()   
+    if query_data is not None:
+        {
+            "nome": [0],
+            "sobrenome": [1],
+            "nome_completo": [2],
+            "ano": [3],
+            "nivel_ensino": [4],
+            "idade": [5], 
+            "cpf": [6],
+            "turma": [7], 
+            "status_aluno": [9]
             
-        })
-    return jsonify(data = query_l, message = "Aluno solicitado")
+        }
+        return jsonify(data = query_data, message = "Aluno solicitado")
+    else:
+        jsonify(message="Aluno não encontrado"), 404
  
 @app.route('/diario/', methods = ['GET'])
 def list_filters():

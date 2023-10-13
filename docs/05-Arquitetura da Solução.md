@@ -32,9 +32,7 @@ Abaixo é possivel ver o modelo ER da aplicação
 ## Esquema Relacional
 
 O Esquema Relacional corresponde à representação dos dados em tabelas juntamente com as restrições de integridade e chave primária.
- 
-![Esquema Relacional](img/Esquema_Relacional.jpeg)
-
+ ![Alt text](img/esquema_relacional.jpg)
 
 ## Modelo Físico
 
