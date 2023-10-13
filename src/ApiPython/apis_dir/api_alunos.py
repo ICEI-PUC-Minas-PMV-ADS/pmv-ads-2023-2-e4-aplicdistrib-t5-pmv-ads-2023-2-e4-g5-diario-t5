@@ -49,21 +49,21 @@ def list_student_by_id(id_student):
     db = cursor.execute(f"SELECT * FROM tabela_alunos where id_aluno = ?", (id_student) )
     query_data = db.fetchone()   
     if query_data is not None:
-        {
-            "nome": [0],
-            "sobrenome": [1],
-            "nome_completo": [2],
-            "ano": [3],
-            "nivel_ensino": [4],
-            "idade": [5], 
-            "cpf": [6],
-            "turma": [7], 
-            "status_aluno": [9]
-            
+        student_data = {
+            "nome": query_data[0],
+            "sobrenome": query_data[1],
+            "nome_completo": query_data[2],
+            "ano": query_data[3],
+            "nivel_ensino": query_data[4],
+            "idade": query_data[5], 
+            "cpf": query_data[6],
+            "turma": query_data[7], 
+            "status_aluno": query_data[9]            
         }
-        return jsonify(data = query_data, message = "Aluno solicitado")
+        return jsonify(data = student_data, message = "Aluno solicitado")
+    
     else:
-        jsonify(message="Aluno não encontrado"), 404
+        return jsonify(message="Aluno não encontrado"), 404
  
 @app.route('/diario/', methods = ['GET'])
 def list_filters():
@@ -204,14 +204,19 @@ def insert_student():
     cursor.commit()
     return jsonify(message = "Aluno cadastrado com sucesso")
     
-@app.route('/diario/deletar/<id_student>', methods = ['DELETE'])
-def delete_student(id_student):
+@app.route('/diario/desativar/<id_student>/<status_student>', methods = ['PUT'])
+def delete_student(id_student, status_student):
 
-    """Deleta um estudante da lista"""
+    """Alterna o status do estudante para inativo/ativo"""
+       
     cursor.execute(f"""
-                   DELETE FROM tabela_alunos WHERE id_aluno=?""", (id_student))
+                   UPDATE tabela_alunos SET status_aluno = {status_student} 
+                   WHERE id_aluno = {id_student}                  
+                   """)
     cursor.commit()
-    return jsonify(message = "Aluno deletado da lista. ")    
+    
+    return jsonify(message = f"Status de {id_student} \
+        alterado para {status_student}. ")    
     
     
 @app.route('/diario/atualizar/<id_student>', methods = ['PUT'])
