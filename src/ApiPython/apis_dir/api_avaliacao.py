@@ -16,11 +16,6 @@ data_for_connection = (
 )
 connection = pyodbc.connect(data_for_connection)
 cursor = connection.cursor()
-show_table_names = cursor.execute(f"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES \
-                                  WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='bncc'")
-show_table_names = show_table_names.fetchall()
-
-print(show_table_names)
 
 @app.route('/diario/listanotas/<materia>/<turma>')
 def get_grades_subjects(materia, turma):

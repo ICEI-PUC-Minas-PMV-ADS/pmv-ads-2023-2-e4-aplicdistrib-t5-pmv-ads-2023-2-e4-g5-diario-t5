@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 import pyodbc
-import pandas as pd
 from flask_pydantic_spec import FlaskPydanticSpec
 from pydantic import BaseModel
 
@@ -9,15 +8,7 @@ app = Flask(__name__)
 spec = FlaskPydanticSpec('flask', title = "Endpoints da api para inserir alunos")
 spec.register(app)
 
-class Student(BaseModel):
-    name: str
-    surname: str
-    full_name: str 
-    grade: str
-    level: str 
-    age: int
-    cpf: str
-    id: int
+
 data_for_connection = (
     "Driver={SQL Server Native Client RDA 11.0};"
     "Server=DESKTOP-1698A6Q\SQLEXPRESS;"
@@ -27,13 +18,6 @@ data_for_connection = (
 
 connection = pyodbc.connect(data_for_connection)
 cursor = connection.cursor()
-
-show_table_names = cursor.execute(f"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES \
-                                  WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='bd_alunos'")
-
-show_table_names = show_table_names.fetchall()
-
-
 
 @app.route('/diario', methods = ['GET'])
 #@spec.validate(resp=Response(HTTP_200=Student))
