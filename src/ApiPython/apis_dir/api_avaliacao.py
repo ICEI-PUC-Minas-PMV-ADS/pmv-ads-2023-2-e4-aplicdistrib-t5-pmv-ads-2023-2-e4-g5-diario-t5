@@ -25,7 +25,8 @@ def get_grades_subjects(materia, turma):
     db = cursor.execute(f"""
                         SELECT tabela_alunos.nome_completo, tabela_materias.materia,
                         tabela_alunos.ano,
-                        tabela_avaliacao.turma,  tabela_avaliacao.total
+                        tabela_avaliacao.turma,  tabela_avaliacao.total, 
+                        tabela_avaliacao.id_avaliacao
                         FROM tabela_alunos  INNER JOIN tabela_avaliacao ON 
                         tabela_alunos.id_aluno = tabela_avaliacao.id_aluno
                         INNER JOIN tabela_materias ON 
@@ -41,7 +42,8 @@ def get_grades_subjects(materia, turma):
             "nome": x[0],
             "materia": x[1],
             "turma": x[2],
-            "total": x[3]
+            "total": x[3],
+            'id_avaliacao': x[4]
         })      
     return jsonify(data = db_l, message = "dados solicitados")
 
@@ -124,7 +126,7 @@ def get_list_filters():
     #matéria e turma 
     if filter_sub is not None and filter_cla is not None:
         query_l = cursor.execute(f"""
-                                SELECT nome_completo, ano, materia, tabela_avaliacao.turma, bimestre, total
+                                SELECT nome_completo, ano, materia, tabela_avaliacao.turma, bimestre, total, id_avaliacao
                                 FROM tabela_alunos INNER JOIN tabela_avaliacao
                                 ON tabela_alunos.id_aluno = tabela_avaliacao.id_aluno
                                 INNER JOIN tabela_materias ON 
@@ -143,7 +145,8 @@ def get_list_filters():
             'materia': x[2],
             'turma': x[3],
             'bimestre': x[4],
-            'total': x[5]
+            'total': x[5],
+            'id_avaliacao': x[6]
         })
     return jsonify(data = list_l)
         
@@ -172,9 +175,9 @@ def get_mean():
             'turma': x[1],
             'media': x[2],
         })
-    return jsonify(data = list_l) 
+    return jsonify(message = "dados solicitados", data = list_l) 
 
-@app.route('/diario/notas/inserir/<id_materia>/<id_bimestre>/<turma>', methods = ['GET', 'POST'])
+@app.route('/diario/notas/inserir/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST'])
 def post_grades( id_materia, id_bimestre, turma):
     """insira, na ordem, id_materia(int), id_bimestre(int) e turma(int) \n
     id_materia disponíveis:
@@ -189,7 +192,10 @@ historia:	8
 geografia:	9    
 
 id_bimestre
-1, 2, 3, 4    
+1, 2, 3, 4  
+
+Informações a serem fornecidas no payload: descricao_at, nota_5. O programa precisa
+de dados de todos os alunos referentes àquela turma  
     """   
     db_ids = cursor.execute(f"""
     select id_aluno from tabela_alunos where turma = {turma}""")
@@ -202,6 +208,8 @@ id_bimestre
             'id_aluno': x
         })
     resultado = []
+    print()
+    #funcionando até aqui
     for i in range(max(len(dic_ids), len(new_act))):
         novo_dicionario = {}
     
@@ -213,17 +221,23 @@ id_bimestre
             novo_dicionario.update(new_act[i])
             print(f"esse é o novo dicionario no segundo if {novo_dicionario}")
         
-        resultado.append(novo_dicionario)    
+        resultado.append(novo_dicionario)
+    print(f"esse é o conteúdo da variável resultado ############################ {resultado}")   
     for x in resultado:
         id_std = x['id_aluno']
         des_act =  x['descricao_at']
+        print(f'esse é o {id_std}')
         gra_5 =  x['nota_5']
+        print(f'essa é a nota_5 {gra_5}')
+        
         cursor.execute(f"""
                     INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, descricao_at, nota_5, turma)
                     VALUES ({id_std},{id_bimestre}, {id_materia}, '{des_act}', {gra_5}, {turma})
                     """)
-        cursor.commit()   
-    return jsonify(message = "dados inseridos")
+ 
+    cursor.commit()
+           
+    return jsonify(message = "dados inseridos", dados_inseridos = resultado)
     
 @app.route('/diario/notas/atualizar/<int:id_avaliacao>', methods = ['PUT'])
 def update_grades(id_avaliacao):
@@ -249,7 +263,8 @@ def update_grades(id_avaliacao):
                        id_avaliacao = {id_avaliacao}
                    """)        
     cursor.commit()
-    return jsonify(message="Atividade atualizada")
+    up_obj.update({'id_avaliacao': id_avaliacao})
+    return jsonify(message="Atividade atualizada", data = up_obj)
     
 @app.route('/diario/notas/deletar/<int:id_avaliacao>', methods = ['DELETE'])
 def delete_grades(id_avaliacao):
@@ -258,7 +273,7 @@ def delete_grades(id_avaliacao):
                    """)
     cursor.commit()
     
-    return jsonify(message=f"Atividade {id_avaliacao} apagada!")      
+    return jsonify(message=f"Atividade {id_avaliacao} apagada!", dado_deletado = id_avaliacao)      
+               
                
 app.run(debug=True)
-    

@@ -43,11 +43,12 @@ def list_all_students():
         })
     return jsonify(message = "Lista de todos os alunos", lista_total = all_st)
 
-@app.route('/diario/aluno/<id_student>', methods = ['GET'])
+@app.route('/diario/aluno/<id_student>', methods=['GET'])
 def list_student_by_id(id_student):
     "Lista os dados de um estudante pelo id"
-    db = cursor.execute(f"SELECT * FROM tabela_alunos where id_aluno = ?", (id_student) )
-    query_data = db.fetchone()   
+    db = cursor.execute("SELECT * FROM tabela_alunos where id_aluno = ?", (id_student,))
+    query_data = db.fetchone()  # Use fetchone() to retrieve a single row
+
     if query_data is not None:
         student_data = {
             "nome": query_data[0],
@@ -55,16 +56,15 @@ def list_student_by_id(id_student):
             "nome_completo": query_data[2],
             "ano": query_data[3],
             "nivel_ensino": query_data[4],
-            "idade": query_data[5], 
+            "idade": query_data[5],
             "cpf": query_data[6],
-            "turma": query_data[7], 
+            "turma": query_data[7],
             "id_aluno": query_data[8],
-            "status_aluno": query_data[9]            
+            "status_aluno": query_data[9]
         }
-        return jsonify(data = student_data, message = "Aluno solicitado")
-    
+        return jsonify(data=student_data, message="Aluno solicitado")
     else:
-        return jsonify(message="Aluno não encontrado"), 404
+        return jsonify(message="Aluno não encontrado"), 404 
  
 @app.route('/diario/', methods = ['GET'])
 def list_filters():
@@ -193,35 +193,30 @@ def insert_student():
     new_ag = new_std['idade']
     new_c = new_std['cpf']
     new_cl = new_std['turma']
-    new_sta  = new_std['status_aluno']    
     
     cursor.execute(f""" INSERT INTO tabela_alunos (nome, sobrenome, nome_completo,
                    ano, nivel_ensino, idade, cpf, turma, status_aluno)
                    VALUES ('{new_na}', '{new_su}', '{new_fn}', '{new_gr}',
                    '{new_l}', {new_ag},
-                   '{new_c}', {new_cl}, '{new_sta}')
+                   '{new_c}', {new_cl}, 'true')
                    """)
     cursor.execute(f"SELECT SCOPE_IDENTITY() AS last_insert_id")
     last_id = cursor.fetchone().last_insert_id
     print(f"o último id inserido foi o {last_id}")
-    new_std.update({'id': last_id})
+    new_std.update({'id_aluno': last_id})
     cursor.commit()
-    return jsonify(message = f"Aluno *** {str.upper(new_fn)} *** id {last_id}, cadastrado com sucesso", data = new_std)
-    
+    return jsonify(message = f"Aluno * {str.upper(new_fn)} * id {last_id}, cadastrado com sucesso", data = new_std)
 
-@app.route('/diario/desativar/<id_student>/<status_student>', methods = ['PUT'])
-def delete_student(id_student, status_student):
+@app.route('/diario/deletar/<id_student>/<status_aluno>', methods = ['PUT'])
+def delete_student(id_student, status_aluno):
 
-    """Alterna o status do estudante para inativo/ativo"""
-       
-    cursor.execute(f"""
-                   UPDATE tabela_alunos SET status_aluno = {status_student} 
-                   WHERE id_aluno = {id_student}                  
-                   """)
+    """Altera status do estudante"""    
+    cursor.execute(f"""UPDATE tabela_alunos SET status_aluno = {status_aluno}
+                    WHERE id_aluno ={id_student}
+                """)
     cursor.commit()
-    
-    return jsonify(message = f"Status de {id_student} \
-        alterado para {status_student}. ")    
+    response_data = {"id_aluno": id_student}
+    return jsonify(message = "Aluno deletado da lista. ", data=response_data)    
     
     
 @app.route('/diario/atualizar/<id_student>', methods = ['PUT'])
@@ -236,18 +231,18 @@ def update_std(id_student):
     up_ag = updated_data['idade']
     up_cpf = updated_data['cpf']
     up_cl = updated_data['turma']
-    up_sta = updated_data['status_aluno']
     
     cursor.execute(f"""UPDATE tabela_alunos SET nome = '{up_na}', 
                    sobrenome = '{up_su}', nome_completo = '{up_fn}',
                    ano = '{up_gr}', nivel_ensino = '{up_le}', 
-                   idade = {up_ag}, cpf = '{up_cpf}', turma = {up_cl}, status_aluno = '{up_sta}'
+                   idade = {up_ag}, cpf = '{up_cpf}', turma = {up_cl}
                    WHERE id_aluno ={id_student}
                    """)
     
-    updated_data.update({'id_aluno': {id_student}})
     cursor.commit()
-    return(jsonify(message = f"Estudante {up_fn} atualizado", data = updated_data))
+    updated_data.update({'id_aluno': id_student})
+    return(jsonify(message = f"Estudante {up_fn} atualizado", data=updated_data))
+    
     
     
 app.run(debug=True)

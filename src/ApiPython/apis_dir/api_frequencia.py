@@ -63,8 +63,9 @@ def get_freq (id_materia, id_bimestre, turma):
                 'id_frequencia': x[8]
                 
             }
-        )        
-
+        ) 
     return jsonify(message = "dados consultados", data = list_q)
+
+# @app.route('diario/frequencia/')
 
 app.run(debug=True)
