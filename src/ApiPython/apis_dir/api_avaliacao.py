@@ -5,8 +5,9 @@ from flask_pydantic_spec import FlaskPydanticSpec
 
 
 app = Flask(__name__ )
-spec = FlaskPydanticSpec('flask', title = "Endpoints da tabela de avaliação")
-spec.register(app)      
+spec = FlaskPydanticSpec(title = "Endpoints da tabela de avaliação", \
+    description = "Documentação da api")
+spec.register(app)
 
 data_for_connection = (
     "Driver={SQL Server Native Client RDA 11.0};"
@@ -17,7 +18,7 @@ data_for_connection = (
 connection = pyodbc.connect(data_for_connection)
 cursor = connection.cursor()
 
-@app.route('/diario/listanotas/<materia>/<turma>')
+@app.route('/diario/listanotas/<string:materia>/<int:turma>')
 def get_grades_subjects(materia, turma):
     """mostra todas as notas de uma matéria de uma turma"""
 
@@ -224,7 +225,7 @@ id_bimestre
         cursor.commit()   
     return jsonify(message = "dados inseridos")
     
-@app.route('/diario/notas/atualizar/<id_avaliacao>', methods = ['PUT'])
+@app.route('/diario/notas/atualizar/<int:id_avaliacao>', methods = ['PUT'])
 def update_grades(id_avaliacao):
     """Atualiza uma atividade criada. Os campos disponíveis para atualização são:
     id_materia(int)= portugues:	1, ingles:	2, artes:	3, matematica:	4, ciencias: 5
@@ -250,7 +251,7 @@ def update_grades(id_avaliacao):
     cursor.commit()
     return jsonify(message="Atividade atualizada")
     
-@app.route('/diario/notas/deletar/<id_avaliacao>', methods = ['DELETE'])
+@app.route('/diario/notas/deletar/<int:id_avaliacao>', methods = ['DELETE'])
 def delete_grades(id_avaliacao):
     """Insira o id de alguma atividade e ela será apagada"""
     cursor.execute(f"""DELETE FROM tabela_avaliacao WHERE id_avaliacao = {id_avaliacao}

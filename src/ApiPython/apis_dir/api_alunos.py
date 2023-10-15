@@ -58,6 +58,7 @@ def list_student_by_id(id_student):
             "idade": query_data[5], 
             "cpf": query_data[6],
             "turma": query_data[7], 
+            "id_aluno": query_data[8],
             "status_aluno": query_data[9]            
         }
         return jsonify(data = student_data, message = "Aluno solicitado")
@@ -188,22 +189,26 @@ def insert_student():
     new_su = new_std['sobrenome']
     new_fn = new_std['nome'] + ' ' + new_std['sobrenome']
     new_gr = new_std['ano']
-    #new_l = new_std['nivel_ensino']
-    #new_ag = new_std['idade']
-    #new_c = new_std['cpf']
+    new_l = new_std['nivel_ensino']
+    new_ag = new_std['idade']
+    new_c = new_std['cpf']
     new_cl = new_std['turma']
-    new_sta  = new_std['status_aluno']
-    
+    new_sta  = new_std['status_aluno']    
     
     cursor.execute(f""" INSERT INTO tabela_alunos (nome, sobrenome, nome_completo,
-                   ano, turma, status_aluno)
-                   VALUES ('{new_na}', '{new_su}', '{new_fn}', 
-                   '{new_gr}', {new_cl}, '{new_sta}')
+                   ano, nivel_ensino, idade, cpf, turma, status_aluno)
+                   VALUES ('{new_na}', '{new_su}', '{new_fn}', '{new_gr}',
+                   '{new_l}', {new_ag},
+                   '{new_c}', {new_cl}, '{new_sta}')
                    """)
-   
+    cursor.execute(f"SELECT SCOPE_IDENTITY() AS last_insert_id")
+    last_id = cursor.fetchone().last_insert_id
+    print(f"o último id inserido foi o {last_id}")
+    new_std.update({'id': last_id})
     cursor.commit()
-    return jsonify(message = "Aluno cadastrado com sucesso")
+    return jsonify(message = f"Aluno *** {str.upper(new_fn)} *** id {last_id}, cadastrado com sucesso", data = new_std)
     
+
 @app.route('/diario/desativar/<id_student>/<status_student>', methods = ['PUT'])
 def delete_student(id_student, status_student):
 
@@ -240,8 +245,9 @@ def update_std(id_student):
                    WHERE id_aluno ={id_student}
                    """)
     
+    updated_data.update({'id_aluno': {id_student}})
     cursor.commit()
-    return(jsonify(message = f"Estudante {up_fn} atualizado"))
+    return(jsonify(message = f"Estudante {up_fn} atualizado", data = updated_data))
     
     
 app.run(debug=True)
