@@ -18,7 +18,7 @@ data_for_connection = (
 connection = pyodbc.connect(data_for_connection)
 cursor = connection.cursor()
 
-@app.route('/diario/listanotas/<string:materia>/<int:turma>')
+@app.route('/diario/listanotas/<string:materia>/<int:turma>', methods = ['GET'])
 def get_grades_subjects(materia, turma):
     """mostra todas as notas de uma matéria de uma turma"""
 
@@ -177,7 +177,7 @@ def get_mean():
         })
     return jsonify(message = "dados solicitados", data = list_l) 
 
-@app.route('/diario/notas/inserir/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST'])
+@app.route('/diario/notas/inserir/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST', 'PUT'])
 def post_grades( id_materia, id_bimestre, turma):
     """insira, na ordem, id_materia(int), id_bimestre(int) e turma(int) \n
     id_materia disponíveis:
@@ -229,14 +229,18 @@ de dados de todos os alunos referentes àquela turma
         print(f'esse é o {id_std}')
         gra_5 =  x['nota_5']
         print(f'essa é a nota_5 {gra_5}')
+    
         
         cursor.execute(f"""
                     INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, descricao_at, nota_5, turma)
                     VALUES ({id_std},{id_bimestre}, {id_materia}, '{des_act}', {gra_5}, {turma})
                     """)
- 
-    cursor.commit()
-           
+    cursor.execute(f"""
+                    UPDATE tabela_avaliacao SET codigo_atividade 
+                    = FLOOR (1 + (RAND() * 999999999999)) WHERE id_aluno in 
+                    ({','.join(map(str,list_ids))})
+                    """)
+    cursor.commit()           
     return jsonify(message = "dados inseridos", dados_inseridos = resultado)
     
 @app.route('/diario/notas/atualizar/<int:id_avaliacao>', methods = ['PUT'])
