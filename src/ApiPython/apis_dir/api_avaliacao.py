@@ -18,8 +18,77 @@ data_for_connection = (
 connection = pyodbc.connect(data_for_connection)
 cursor = connection.cursor()
 
-@app.route('/diario/listanotas/<string:materia>/<int:turma>', methods = ['GET'])
-def get_grades_subjects(materia, turma):
+
+# cursor.execute(f"""
+#                    create table tabela_atividade (
+#                 id_aluno int,                
+#                    id_materia int, 
+#                    id_bimestre int, 
+#                    id_avaliacao int, 
+#                    descricao_at nvarchar(100),
+#                    codigo_atividade int,
+#                    turma int)""")
+
+
+# cursor.execute(f"""insert into tabela_atividade 
+#                (id_avaliacao, id_materia, id_bimestre,
+#                descricao_at, codigo_atividade, turma) 
+#                select id_aluno, id_avaliacao, id_materia, id_bimestre,
+#                descricao_at, codigo_atividade, turma from 
+#                tabela_avaliacao""")
+cursor.commit()
+
+#funcionando
+@app.route('/diario/atividades', methods = ['GET'])
+def get_all_act():
+    """Lista todas as atividades de todos os alunos de todas as turmas"""
+
+    db = cursor.execute(f"""SELECT * from tabela_atividade
+                        """)
+    db = db.fetchall()
+    db_l = []
+    for x in db:
+        db_l.append({
+            'id_materia': x[0],
+            'id_bimestre': x[1],
+            'id_avaliacao':x[2],
+            'descricao_at':x[3],
+            'codigo_atividade':x[4],
+            'turma': x[5],
+            'id_atividade':x[6]
+        })
+    return jsonify(message = "Todas as atividades", data = db_l)
+#testando
+app.route('/diario/at/<int:codigo_atividade>', methods = ['GET'])
+def get_act_by_id(codigo_atividade):
+    db = cursor.execute(f"""SELECT * FROM tabela_atividade WHERE codigo_atividade = {codigo_atividade}
+                       """)
+    db = db.fetchall()
+    db_l = []
+    for x in db:
+        db_l.append({
+            'id_materia': x[0],
+            'id_bimestre': x[1],
+            'id_avaliacao':x[2],
+            'descricao_at':x[3],
+            'codigo_atividade':x[4],
+            'turma': x[5],
+            'id_atividade':x[6]
+        })
+    return jsonify(message = f"Alunos da atividade listados", data = db_l)
+    
+@app.route('/diario/inserir/atividades/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST'])
+def insert_act(id_materia, id_bimestre, turma):
+    act_obj = request.json(force=True)
+    act_obj = act_obj['descricao_at']
+    cursor.execute('insert into tabela_atividades (id_materia, id_bimestre, turma)')
+    
+    
+    return jsonify(message = "Atividade inserida com sucesso")
+    
+
+@app.route('/diario/listanotas/', methods = ['GET'])
+def get_grades_subjects():
     """mostra todas as notas de uma matéria de uma turma"""
 
     db = cursor.execute(f"""
@@ -32,8 +101,7 @@ def get_grades_subjects(materia, turma):
                         INNER JOIN tabela_materias ON 
                         tabela_avaliacao.id_materia = 
                         tabela_materias.id_materia                        
-                        where tabela_materias.materia = '{materia}' 
-                        and tabela_avaliacao.turma = {turma}
+                        
                         """)
     db_get = db.fetchall()
     db_l = []    
@@ -228,20 +296,19 @@ de dados de todos os alunos referentes àquela turma
         des_act =  x['descricao_at']
         print(f'esse é o {id_std}')
         gra_5 =  x['nota_5']
-        print(f'essa é a nota_5 {gra_5}')
-    
+        print(f'essa é a nota_5 {gra_5}')    
         
         cursor.execute(f"""
-                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, descricao_at, nota_5, turma)
-                    VALUES ({id_std},{id_bimestre}, {id_materia}, '{des_act}', {gra_5}, {turma})
+                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, nota_5, turma)
+                    VALUES ({id_std},{id_bimestre}, {id_materia}, {gra_5}, {turma})
                     """)
-    cursor.execute(f"""
+    cod_gerado_avaliacao = cursor.execute(f"""
                     UPDATE tabela_avaliacao SET codigo_atividade 
                     = FLOOR (1 + (RAND() * 999999999999)) WHERE id_aluno in 
                     ({','.join(map(str,list_ids))})
                     """)
     cursor.commit()           
-    return jsonify(message = "dados inseridos", dados_inseridos = resultado)
+    return jsonify(message = "dados inseridos", dados_inseridos = resultado), cod_gerado_avaliacao
     
 @app.route('/diario/notas/atualizar/<int:id_avaliacao>', methods = ['PUT'])
 def update_grades(id_avaliacao):
