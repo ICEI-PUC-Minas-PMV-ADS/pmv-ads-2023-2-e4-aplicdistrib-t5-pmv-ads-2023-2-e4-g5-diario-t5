@@ -9,6 +9,8 @@ spec = FlaskPydanticSpec(title = "Endpoints da tabela de avaliação", \
     description = "Documentação da api")
 spec.register(app)
 
+app.config['id_for_grades'] = None
+
 data_for_connection = (
     "Driver={SQL Server Native Client RDA 11.0};"
     "Server=DESKTOP-1698A6Q\SQLEXPRESS;"
@@ -51,11 +53,9 @@ def get_all_act():
         db_l.append({
             'id_materia': x[0],
             'id_bimestre': x[1],
-            'id_avaliacao':x[2],
-            'descricao_at':x[3],
-            'codigo_atividade':x[4],
-            'turma': x[5],
-            'id_atividade':x[6]
+            'descricao_at':x[2],
+            'turma': x[3],
+            'id_atividade':x[4]
         })
     return jsonify(message = "Todas as atividades", data = db_l)
 #testando
@@ -71,21 +71,29 @@ def get_act_by_id(codigo_atividade):
             'id_bimestre': x[1],
             'id_avaliacao':x[2],
             'descricao_at':x[3],
-            'codigo_atividade':x[4],
-            'turma': x[5],
-            'id_atividade':x[6]
+            'turma': x[4],
+            'id_atividade':x[5]
         })
     return jsonify(message = f"Alunos da atividade listados", data = db_l)
     
 @app.route('/diario/inserir/atividades/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST'])
 def insert_act(id_materia, id_bimestre, turma):
-    act_obj = request.json(force=True)
-    act_obj = act_obj['descricao_at']
-    cursor.execute('insert into tabela_atividades (id_materia, id_bimestre, turma)')
     
+    act_obj = request.get_json(force=True)
+    act_des = act_obj['descricao_at']
+    cursor.execute(f"""INSERT INTO tabela_atividade (id_materia, id_bimestre, turma, descricao_at)
+                   VALUES ({id_materia}, {id_bimestre}, {turma}, '{act_des}')""")
+    last_id_act = cursor.execute(f"""SELECT @@IDENTITY AS last_id_inserted""")
+    last_id_act = last_id_act.fetchone()
+    id_for_grades = last_id_act.last_id_inserted
+    app.config['id_for_grades'] = id_for_grades
+    cursor.commit()
+    act_obj.update({'descricao_at': act_des})
+    act_obj.update({'id_materia': id_materia, 'id_bimestre': id_bimestre, 'id_atividade': id_for_grades, 'turma': turma})
+   
     
-    return jsonify(message = "Atividade inserida com sucesso")
-    
+    return jsonify(message = f"Atividade inserida com sucesso e o id inserido é {id_for_grades}", data = act_obj)
+
 
 @app.route('/diario/listanotas/', methods = ['GET'])
 def get_grades_subjects():
@@ -116,7 +124,7 @@ def get_grades_subjects():
     return jsonify(data = db_l, message = "dados solicitados")
 
 
-@app.route('/diario/notas/')
+@app.route('/diario/notas/', methods = ['GET'])
 def get_list_filters():
     """1) materia=MATERIA(str)&bimestre=BIMESTRE(int) => gera todos os
     boletins para todas as turmas do bimestre de 1 matéria \n
@@ -245,8 +253,8 @@ def get_mean():
         })
     return jsonify(message = "dados solicitados", data = list_l) 
 
-@app.route('/diario/notas/inserir/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST', 'PUT'])
-def post_grades( id_materia, id_bimestre, turma):
+@app.route('/diario/notas/inserir/<int:id_materia>/<int:id_bimestre>/<int:turma>/<int:id_atividade>', methods = ['GET', 'POST', 'PUT'])
+def post_grades( id_materia, id_bimestre, turma, id_atividade):
     """insira, na ordem, id_materia(int), id_bimestre(int) e turma(int) \n
     id_materia disponíveis:
 portugues:	1
@@ -277,38 +285,33 @@ de dados de todos os alunos referentes àquela turma
         })
     resultado = []
     print()
-    #funcionando até aqui
-    for i in range(max(len(dic_ids), len(new_act))):
-        novo_dicionario = {}
-    
-        if i < len(dic_ids):
-            novo_dicionario.update(dic_ids[i])
-            print(f"esse é o novo dicionario no primeiro if {novo_dicionario}")
-        
-        if i < len(new_act):
-            novo_dicionario.update(new_act[i])
-            print(f"esse é o novo dicionario no segundo if {novo_dicionario}")
-        
-        resultado.append(novo_dicionario)
-    print(f"esse é o conteúdo da variável resultado ############################ {resultado}")   
-    for x in resultado:
+    for x in dic_ids:
         id_std = x['id_aluno']
-        des_act =  x['descricao_at']
-        print(f'esse é o {id_std}')
-        gra_5 =  x['nota_5']
-        print(f'essa é a nota_5 {gra_5}')    
+        gra_5 = new_act[dic_ids.index(x)]['nota_5'] if dic_ids.index(x) < len(new_act) else None
+
+        aluno_dict = {
+            'id_aluno': id_std,
+            'id_bimestre': id_bimestre,
+            'id_materia': id_materia,
+            'nota_5': gra_5,
+            'id_atividade': id_atividade
+        }
+        resultado.append(aluno_dict)
         
+    for aluno_dict in resultado:
+        id_std = aluno_dict['id_aluno']
+        id_bimestre = aluno_dict['id_bimestre']
+        id_materia = aluno_dict['id_materia']
+        gra_5 = aluno_dict['nota_5']
+        id_atividade = aluno_dict['id_atividade']
+            
         cursor.execute(f"""
-                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, nota_5, turma)
-                    VALUES ({id_std},{id_bimestre}, {id_materia}, {gra_5}, {turma})
-                    """)
-    cod_gerado_avaliacao = cursor.execute(f"""
-                    UPDATE tabela_avaliacao SET codigo_atividade 
-                    = FLOOR (1 + (RAND() * 999999999999)) WHERE id_aluno in 
-                    ({','.join(map(str,list_ids))})
-                    """)
+                    INSERT INTO tabela_avaliacao (id_aluno, id_materia, id_bimestre, nota_5, id_atividade)
+                    VALUES ({id_std},{id_bimestre}, {id_materia}, {gra_5}, {id_atividade})
+                    """) 
+    
     cursor.commit()           
-    return jsonify(message = "dados inseridos", dados_inseridos = resultado), cod_gerado_avaliacao
+    return jsonify(message = "dados inseridos", dados_inseridos = resultado)
     
 @app.route('/diario/notas/atualizar/<int:id_avaliacao>', methods = ['PUT'])
 def update_grades(id_avaliacao):
