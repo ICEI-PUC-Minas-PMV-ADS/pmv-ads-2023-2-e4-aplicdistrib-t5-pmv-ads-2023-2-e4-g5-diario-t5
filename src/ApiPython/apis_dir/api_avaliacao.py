@@ -45,7 +45,10 @@ cursor.commit()
 def get_all_act():
     """Lista todas as atividades de todos os alunos de todas as turmas"""
 
-    db = cursor.execute(f"""SELECT * from tabela_atividade
+    db = cursor.execute(f"""SELECT a.*, b.bimestre, c.materia
+                            FROM tabela_atividade AS a
+                            INNER JOIN tabela_bimestre AS b ON a.id_bimestre = b.id_bimestre 
+                            INNER JOIN tabela_materias AS c ON a.id_materia = c.id_materia       
                         """)
     db = db.fetchall()
     db_l = []
@@ -55,26 +58,33 @@ def get_all_act():
             'id_bimestre': x[1],
             'descricao_at':x[2],
             'turma': x[3],
-            'id_atividade':x[4]
+            'id_atividade':x[4],
+            'bimestre': x[5],
+            'materia': x[6]
         })
-    return jsonify(message = "Todas as atividades", data = db_l)
+    return jsonify(message = "Todas as atividades", lista_total = db_l)
 #testando
-app.route('/diario/at/<int:codigo_atividade>', methods = ['GET'])
-def get_act_by_id(codigo_atividade):
-    db = cursor.execute(f"""SELECT * FROM tabela_atividade WHERE codigo_atividade = {codigo_atividade}
+@app.route('/diario/atividade/<int:id_atividade>', methods = ['GET'])
+def get_act_by_id(id_atividade):
+    db = cursor.execute(f"""SELECT a.*, b.bimestre, c.materia
+                            FROM tabela_atividade AS a
+                            INNER JOIN tabela_bimestre AS b ON a.id_bimestre = b.id_bimestre 
+                            INNER JOIN tabela_materias AS c ON a.id_materia = c.id_materia    
+                            WHERE a.id_atividade = {id_atividade}
                        """)
-    db = db.fetchall()
-    db_l = []
-    for x in db:
-        db_l.append({
-            'id_materia': x[0],
-            'id_bimestre': x[1],
-            'id_avaliacao':x[2],
-            'descricao_at':x[3],
-            'turma': x[4],
-            'id_atividade':x[5]
-        })
-    return jsonify(message = f"Alunos da atividade listados", data = db_l)
+    query_data = db.fetchone() 
+    
+    if query_data is not None:
+        db = {
+            'id_materia': query_data[0],
+            'id_bimestre': query_data[1],
+            'descricao_at': query_data[2],
+            'turma': query_data[3],
+            'id_atividade': query_data[4],
+            'bimestre': query_data[5],
+            'materia': query_data[6]
+    }
+    return jsonify(message = f"Alunos da atividade listados", data = db)
     
 @app.route('/diario/inserir/atividades/<int:id_materia>/<int:id_bimestre>/<int:turma>', methods = ['GET', 'POST'])
 def insert_act(id_materia, id_bimestre, turma):
