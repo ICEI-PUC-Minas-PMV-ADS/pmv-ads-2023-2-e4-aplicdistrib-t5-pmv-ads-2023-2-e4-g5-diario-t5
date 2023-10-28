@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+@{
+    var currentPage = ViewContext.RouteData.Values["action"] as string;
+    var pageTitle = (currentPage == "Avaliacao") ? "Avaliações" : currentPage;
+   
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diario</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Puc.Diario.Presentation.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/style.css">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  
+</head>
+<style>
+    .dataTables_filter {
+        float: left !important;
+        margin-bottom: 10px;
+    }
+
+    .dataTables_length {
+        float: right !important;
+        margin-top: 10px;
+    }
+
+    .text-blue {
+        color: #0645ad !important;
+    }
+
+
+</style>
+<body>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="p-4 pt-5">                
+                <ul class="list-unstyled components mb-5">
+                    <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Avaliacao" asp-action="Avaliacao">Atividades</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Alunos" asp-action="Alunos">Alunos</a>
+                        </li>
+                </ul>
+
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-dark">
+                        <i class="fa fa-bars"></i>
+                        <span class="sr-only">Toggle Menu</span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" style="font-size:18px;" href="#">@pageTitle</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+                @RenderBody()
+        </div>
+    </div>
+    <!--MODAIS-->
+    <div class="modal fade" id="registry-mainregister-modal" role="dialog" data-keyboard="false" data-backdrop="static">         
+        <div class="modal-dialog modal-lg" role="document">
+            <div id="modal-content" class="modal-content modal-body border-0 p-4"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="mod-registro-popup"  tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div id="modal-content" class="modal-content modal-body border-0 p-4"></div>
+        </div>
+    </div>
+
+    <div class="modalLoading fade bd-example-modal-lg" id="loadingModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="width: 48px">
+                <span class="fa fa-spinner fa-spin fa-3x"></span>
+            </div>
+        </div>
+    </div>
+    <!--MODAIS-->
+
+
+    <!--FUNCTIONS-->
+    <script type="text/javascript">
+        $('#mod-registro-popup').find('.modal-dialog').addClass('shadow-lg');
+    </script>
+    </script>
+    <!--FUNCTIONS-->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="~/js/popper.js" asp-append-version="true"></script>
+    <script src="~/js/alertConfirm.js" asp-append-version="true"></script>
+    <script src="~/js/bootbox.js" asp-append-version="true"></script>
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

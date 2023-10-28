@@ -1,0 +1,514 @@
+﻿@model Puc.Diario.Domain.Models.Avaliacao.Atividade
+@{
+    Layout = null;
+    var teste = ViewBag.AnoCombo;
+    //var ano = Model.Ano;
+    var flEdit = ViewBag.flEdit;
+    //var msg = (Model.Status == true ? "Tem certeza que deseja inativar?" : "Tem certeza que deseja ativar?");
+    dynamic nivel;
+}
+
+<style>
+     #txtNota::placeholder {
+        text-align: center;
+      }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>
+<div class="container">
+    <div class="card-body p-0">
+        <div class="row mb-0 bd-border bd-solid bd-dark-gray d-none d-md-flex">
+            <div class="col-4 col-md-4 d-flex justify-content-center align-items-center border border-solid bd-dark-gray border-right">
+                @if (flEdit)
+                {
+                    <span class="text-bolder">CADASTRO</span>
+                }
+                else
+                {
+                    <div class="row text-center">
+                        <span class="font-weight-bold">Data de Cadastro</span>
+                        <span>@Model.DataAtv.Value.Date.ToString("dd/MM/yyyy")</span>
+                    </div>
+                }
+            </div>
+            <div class="col-4 col-md-4 d-flex justify-content-center align-items-center border border-solid bd-dark-gray border-right">
+                <h3 class="mb-0 font-weight-bold text-uppercase">ATIVIDADE</h3>
+            </div>
+            <div class="col-4 col-md-4">
+                <div class="row mb-0 py-1 border border-solid bd-dark-gray border-bottom text-center">
+                    <label class="col-4 col-md-6 col-form-label font-weight-bold text-center">
+                        Número
+                    </label>
+                    <label class="col-8 col-md-6 col-form-label font-weight-bold text-left text-blue">
+                        <span class="text-blue">ATV-</span>@((Model.IdAtividade == 0 ? "" : Model.IdAtividade))
+                    </label>
+                </div>
+                <div class="row mb-0 py-1 border text-center">
+                    <label class="col-6 col-md-6 col-form-label font-weight-bold text-center">
+                        Status
+                    </label>
+                    <div class="col-4 col-md-6 align-self-center text-left mb-1">
+                       @if (Model.Status == true)
+                        {
+                            <span class="badge badge-success p-2" style="width:64%;">Avaliado</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-warning p-2" style="width:64%; color:white">Em Avaliação</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <form method="post" id="frmRegAtividade">
+            <input type="hidden" name="hdnIdAtividade" id="hdnIdAtividade" value="@((Model != null) ? Model.IdAtividade : "")">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mt-2">
+                        <div>
+                            <label class="control-label fw-bolder">DESCRIÇÂO</label>
+                        </div>
+                        @if (flEdit)
+                        {
+                            <textarea type="text" class="form-control form-control-sm" name="txtDesc" id="txtDesc" maxlength="180" rows="5" style="resize:none;">@((Model != null) ? Model.DescricaoAtv : "")</textarea>
+                            <span asp-validation-for="DescricaoAtv" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <label class="control-label">@Model.DescricaoAtv</label>
+                        }
+                    </div>              
+
+                    <div class="endereco">
+                        <div>
+                            <label class="control-label fw-bolder">TURMA</label>
+                        </div>
+                        @if (flEdit)
+                        {
+                            <select name="txtTurma" id="txtTurma" class="form-select form-control form-control-sm">
+                                <option value="">Selecione...</option>
+                                @foreach (var item in (SelectList)ViewBag.Turma)
+                                {
+                                    var sel = (item.Value == Model.Turma.ToString()) ? "selected" : null;
+                                    <option value="@item.Value" selected="@sel">@item.Text</option>
+                                }
+                            </select>                          
+                            <span asp-validation-for="Turma" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <label class="control-label">@(Model.Turma != null ? Model.Turma : "-")</label>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <div class="form-group">
+                        <div>
+                            <label class="control-label fw-bolder">MATÉRIA</label>
+                        </div>
+                        @if (flEdit)
+                        {
+                            <select name="txtMateria" id="txtMateria" class="form-select form-control form-control-sm">
+                                <option value="">Selecione...</option>
+                                @foreach (var item in (SelectList)ViewBag.Materia)
+                                {
+                                    var sel = (item.Text == Model.Materia) ? "selected" : null;
+                                    <option value="@item.Value" selected="@sel">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Materia" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <label class="control-label">@Model.Materia</label>
+                            <input type="hidden" name="txtMateria" id="txtMateria" value="@Model.IdMateria" />
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <label class="control-label fw-bolder">BIMESTRE</label>
+                        </div>
+                        @if (flEdit)
+                        {
+                            <select name="txtBimestre" id="txtBimestre" class="form-select form-control form-control-sm">
+                                <option value="">Selecione...</option>
+                                @foreach (var item in (SelectList)ViewBag.Bimestre)
+                                {
+                                    var sel = (item.Text == Model.Bimestre) ? "selected" : null;
+                                    <option value="@item.Value" selected="@sel">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Bimestre" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <label class="control-label">@Model.Bimestre</label>
+                            <input type="hidden"  name="txtBimestre" id="txtBimestre" value="@Model.IdBimestre" />
+                        }
+                    </div>
+                </div>
+                @*se o flEdit = false ele mostra a tabela se a nota for diferente de nulo ele mostra a nota caso a nota for nula mostra o input*@
+                @if (!flEdit)
+                {                
+                    <div class="col-md-12 mt-2">
+                        <div class="container col-md-12 m-0 colDataTable">
+                            <table class="table table-bordered table-hover table w-100" id="alunosTable">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="d-none">#orderOnly</th>
+                                        <th>Id </th>
+                                        <th>Nome Completo</th>
+                                        <th class="text-center">Turma</th>
+                                        <th class="text-center">Nota</th>
+                                        <th class="text-center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>
+                }
+           
+            </div>
+        </form>
+        <div class="text-center p-4">
+            @if (flEdit)
+            {
+                <button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="SalvarRegistro(this);">
+                    @(
+                        (Model.IdAtividade > 0 ? "Salvar" : "Incluir")
+                        )
+                </button>
+               
+            }
+            else
+            {
+                <button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="Avaliar(this);">Avaliar</button>
+                <button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="EditarRegistro(this, @Model.IdAtividade);">Editar</button>
+                //<button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="AlterarStatusRegistro(this, @Model.IdAtividade, @((Model.Status == true ? 0 : 1)))">@((Model.Status == true ? "Inativar" : "Reativar"))</button>
+            }
+            <button class="btn btn-outline-success" onclick="CloseModal()">Fechar</button>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    var flEdit = '@flEdit';
+
+    $(document).ready(function(){
+     
+        var idBimestre = $("#frmRegAtividade").find(`#txtBimestre`).val();
+        var idMateria = $("#frmRegAtividade").find(`#txtMateria`).val();
+        //console.log("MATEERIAAAAAAAAAAAA", idMateria);
+    })
+
+    if(flEdit == "False"){
+        $('#registry-mainregister-modal').find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl').addClass('modal-xl');
+    }else{
+        $('#registry-mainregister-modal').find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl').addClass('modal-lg');
+    }
+    
+    async function SalvarRegistro(btn) {
+        var form = $('#frmRegAtividade');
+        var flNew = ($('#frmRegAtividade').find('#hdnIdAtividade').val() == 0);
+
+        if ($(form).find('#txtDesc').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtDesc').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtMateria').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtMateria').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtTurma').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtTurma').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtBimestre').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtBimestre').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+
+        $(btn).html("Carregando...");
+        $(btn).attr('disabled', 'disabled');
+
+        var formData = $(form).serialize();
+        $.ajax({
+            url: '@Url.Content("~/Avaliacao/Salvar")',
+            method: 'post',
+            cache: false,
+            data: formData,
+            success: function (result) {
+                HideModalLoading();
+                try {
+                    var table = $('#atividadesTable').DataTable();
+                    table.ajax.reload();
+                    var params = {};                    
+                    params.idAtividade = result.registro.idAtividade;
+                    params.flEdit = false,
+                        OpenDynamicModal('@Url.Content("~/Avaliacao/Register")', params, '#registry-mainregister-modal', 800);
+
+                } catch (err) {
+
+                }
+            }
+        });
+    }
+
+    async function Avaliar(btn) {
+        var form = $('#frmRegAtividade');
+        var hdnAtvId = $('#frmRegAtividade').find('#hdnIdAtividade').val();
+        var idBimestre = $(form).find("#txtBimestre").val();
+        var idMateria = $(form).find("#txtMateria").val();
+        const avaliacao = [];
+        var status = [];
+        var notasVazias = false;
+        var canPass = true;
+
+        $(form).find('.nota').each((index, obj) => {
+
+            let idAluno = $(obj).data('aluno-id');
+            let nota = $(`#txtNota${idAluno}`).val();          
+            let idAtividade = $(`#hdnIdAtividade`).val();
+            let total = $(`#txtNota${idAluno}`).val();
+            
+            //if (nota === "") {
+            //    notasVazias = true;
+            //    simpleConfirm("Por favor avalie o aluno", 1, "Aviso", function () {
+            //        setTimeout(function () { $(form).find(`#txtNota${idAluno}`).focus(); }, 800);
+            //    }, true, "OK");
+            //    return false;
+            //}
+
+            if(nota === ""){
+                notasVazias = true;
+            }
+            else {
+                // Converter a nota para um número (caso seja uma string)
+                const notaAv = parseFloat(nota);
+
+                if (notaAv > 25) {
+                    simpleConfirm("A nota não pode ultrapassar 25 pontos", 1, "Aviso", function () {
+                        setTimeout(function () { $(form).find(`#txtNota${idAluno}`).focus(); }, 800);
+                    }, true, "OK");
+                    canPass = false;
+                }
+                
+                avaliacao.push({
+                    IdAluno: idAluno,
+                    IdMateria: idMateria,
+                    IdBimestre: idBimestre,
+                    IdAtividade: idAtividade,
+                    Nota_5: nota,
+                    Total: total
+                })
+            }
+        });
+
+       
+        if(canPass){
+            var formData = $(form).serialize();
+            $(btn).html("Carregando...");
+            $(btn).attr('disabled', 'disabled');
+
+            $.ajax({
+                url: '@Url.Content("~/Avaliacao/InserirNotas")',
+                method: 'post',
+                cache: false,
+                data: { notas: avaliacao, hdnAtvId: hdnAtvId, notasVazias: notasVazias },
+                success: function (result) {
+                    HideModalLoading();
+                    try {
+                        var table = $('#atividadesTable').DataTable();
+                        table.ajax.reload();
+                        var params = {};
+                        params.idAtividade = result.registro;
+                        params.flEdit = false,
+                        OpenDynamicModal('@Url.Content("~/Avaliacao/Register")', params, '#registry-mainregister-modal', 800);
+
+                    } catch (err) {
+
+                    }
+                }
+            });
+        }else{
+            return false;
+        }
+    }
+
+    function EditarRegistro(btn, idAtividade) {
+        var params = {};
+        params.idAtividade = idAtividade;
+        params.flEdit = true;
+
+        OpenDynamicModal('@Url.Content("~/Avaliacao/Register")', params, '#registry-mainregister-modal', 800);
+    }
+
+    function LoadRegistro(id) {
+        if (id > 0) {
+            var params = {};
+            params.idAluno = id;
+            params.flEdit = false;
+            params.outraPagina = true;
+            OpenDynamicModal('@Url.Content("~/Alunos/Register")', params, '#mod-registro-popup', 800);
+        } else {
+            var params = {};
+            params.idAluno = id;
+            params.flEdit = true;
+             params.outraPagina = true;
+            OpenDynamicModal('@Url.Content("~/Alunos/Register")', params, '#mod-registro-popup', 800);
+        }
+    }
+  
+
+    $('#alunosTable').DataTable({
+        dom: '<"datatable-header"fB><"datatable-scroll"t><"datatable-footer"ipl>',
+        language: {
+            search: "",
+            searchPlaceholder: "Pesquisar Aluno...",
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            infoEmpty: "Nenhum registro encontrado.",
+            zeroRecords: "Nenhum registro encontrado.",
+            loadingRecords: "Carregando...",
+            lengthMenu: "Exibir: _MENU_"
+        },
+        ordering: true,
+        order: [[0, 'desc']],
+        columnDefs: [
+            {
+                orderData: [0],
+                targets: 1
+            }
+        ],
+        ajax: {
+            url: "/Alunos/GetAlunosListaAvaliacao",
+            data:{turma:'@Model.Turma', idAtividade:'@Model.IdAtividade'},
+            dataSrc: "data"
+        },
+        columns: [
+            {
+                width: '0%', //COLLUMN PERCENTUAL WIDTH
+                data:
+                    function (row,
+                        type,
+                        set,
+                        meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)
+                        return "<span class=\"nota\" data-aluno-id=" + Number(row.idAluno) + ">" + row.idAluno + "</span>";
+                    },
+                className: 'text-center d-none' //COLUMN CUSTOM CSS
+            },
+            {
+                width: '10%', //ID
+                data: function (row, type, set, meta) { 
+                    var content = "<a href=\"javascript:void(0);\" class=\"data-export text-blue text-bold\" onclick=\"LoadRegistro(" + row.idAluno + ")\">ALN-" + row.idAluno + "</a>";
+                    return content;
+                },
+                className: 'd-none d-md-table-cell'
+            },
+            { data: "nomeCompleto" },
+            { data: "turma", className: "text-center" },
+            {
+                width: '10%', //NOTA
+                data: function (row, type, set, meta) { 
+                    var badge = showBadgesNotas(row.nota_5);
+                    var nota = (row.nota_5 != null) 
+                        ? "<span class=\"badge " + badge + " p-2\" style=\"width: 40%; font-size:medium; color:white;\">" + row.nota_5 + "</span>"                     
+                        : "<input type=\"number\" placeholder=\"Avaliar\" class=\"form-control form-control-sm\" style=\"width:50%; margin:auto;\" name=\"txtNota" + row.idAluno + "\" id=\"txtNota" + row.idAluno + "\" />";
+                    var content = nota;
+                    return content;
+                },
+                className: 'text-center d-none d-md-table-cell'
+            },
+            {
+                width: '10%', //TOTAL
+                data: function (row, type, set, meta) { 
+                    var total = (row.total != null) ? row.total : "0"; 
+                    var soma = row.nota_5 + row.total;
+                    var badge = showBadgesNotas(total);
+                    var content = "<span class=\"badge " + badge + " p-2\" style=\"width: 40%; font-size:medium; color:white;\">" + total + "/25 </span>";
+                    return content;
+                },
+                className: 'text-center d-none d-md-table-cell'
+            }
+        ],
+        initComplete: function () {
+            HideModalLoading();
+            console.log("Sorting settings:", this.api().order());
+            $('.dt-buttons').addClass('d-none d-md-block');
+            $('.dataTables_filter').find('span').addClass('d-none d-md-block');
+            $('.dataTables_filter').addClass('text');
+            //$('.dataTables_filter').prepend('<button class="dt-button btn btn-dark mr-1" tabindex="0" type="button" onclick="OpenDynamicModal(\'@Url.Content("~/Alunos/Register")\', null, \'#registry-mainregister-modal\', 800);"><span><i class="fas fa-plus"></i></span></button>');
+            $('.dataTables_filter').find('input[type="search"]').attr({ 'name': 'txtSearch' });
+
+            if (window.innerWidth < 768)
+                $('.dataTables_filter').find('input[type="search"]').css('width', '115px');
+
+            var timer;
+            var lastSearch;
+            $(".dataTables_filter input")
+                .off("keyup input")
+                .bind("input").on("keyup",
+                    function (e) {
+                        if (e.keyCode == 13) {
+                            clearTimeout(timer)
+                            table.search(this.value).draw();
+                            return
+                        }
+
+                        if (this.value == "" || (this.value.length >= 3 && lastSearch != this.value)) {
+                            clearTimeout(timer)
+                            timer = setTimeout(() => {
+                                lastSearch = this.value
+                                table.search(this.value).draw()
+                            },
+                                500);
+                        }
+
+                        return;
+                    });
+
+            $('#alunosTable').on('draw.dt', function () {
+                HideModalLoading();
+            });
+
+            $('#alunosTable').on('page.dt', function () {
+                ShowModalLoading();
+            });
+
+            $('#alunosTable').on('length.dt', function () {
+                ShowModalLoading();
+            });
+
+            $('#alunosTable').on('search.dt', function () {
+                $('.dataTables_filter').find('input[type="search"]').blur();
+                ShowModalLoading();
+            });
+
+        }
+    }).on('init.dt', function (e, settings, processing) {
+        $('.colDataTable').fadeIn();
+        HideModalLoading();
+    });
+    
+</script>
