@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33122.133
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Presentation", "1 - Presentation", "{B927D13B-76DE-4B0D-9DCD-19FF142EEE59}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Services", "2 - Services", "{46F402B7-4FD8-463B-A080-9E73F41435FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", "{8A1E8782-7C78-4D23-87B9-5A46739C4141}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Infra", "5 - Infra", "{99F92355-53B1-40BD-8B4D-19703073B5B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - ApiData", "4 - ApiData", "{F64C2D87-FF46-42AE-A2CB-4BDB4A00A59A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puc.Diario.Presentation", "src\Puc.Diario.Presentation\Puc.Diario.Presentation.csproj", "{78D859EA-3861-4109-BD9D-0EC9546FEA95}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puc.Diario.Services", "src\Puc.Diario.Services\Puc.Diario.Services.csproj", "{CE69614D-40A6-40A9-B46C-CDCB3F436134}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puc.Diario.Domain", "src\Puc.Diario.Domain\Puc.Diario.Domain.csproj", "{4C9D2E50-D1A9-4C9D-872A-46471FE8AE2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puc.Diario.ApiData", "src\Puc.Diario.ApiData\Puc.Diario.ApiData.csproj", "{F34D9D95-5B40-454E-BB87-3C291C1554D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puc.Diario.Infra", "src\Puc.Diario.Infra\Puc.Diario.Infra.csproj", "{8F4AE7BD-4451-458C-B909-28766A144586}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Puc.Diario.DI", "src\Puc.Diario.DI\Puc.Diario.DI.csproj", "{F0118995-C889-426A-AB4B-C156CD7CA772}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testes", "Testes", "{D8E9FECB-4DD8-40B3-8D95-0AEEB1498529}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Puc.Diario.Tests", "testes\Puc.Diario.Test\Puc.Diario.Tests\Puc.Diario.Tests.csproj", "{82D62D62-1CF6-4929-934B-32613C0E396F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{78D859EA-3861-4109-BD9D-0EC9546FEA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78D859EA-3861-4109-BD9D-0EC9546FEA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78D859EA-3861-4109-BD9D-0EC9546FEA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78D859EA-3861-4109-BD9D-0EC9546FEA95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE69614D-40A6-40A9-B46C-CDCB3F436134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE69614D-40A6-40A9-B46C-CDCB3F436134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE69614D-40A6-40A9-B46C-CDCB3F436134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE69614D-40A6-40A9-B46C-CDCB3F436134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C9D2E50-D1A9-4C9D-872A-46471FE8AE2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C9D2E50-D1A9-4C9D-872A-46471FE8AE2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C9D2E50-D1A9-4C9D-872A-46471FE8AE2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C9D2E50-D1A9-4C9D-872A-46471FE8AE2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F34D9D95-5B40-454E-BB87-3C291C1554D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F34D9D95-5B40-454E-BB87-3C291C1554D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F34D9D95-5B40-454E-BB87-3C291C1554D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F34D9D95-5B40-454E-BB87-3C291C1554D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F4AE7BD-4451-458C-B909-28766A144586}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4AE7BD-4451-458C-B909-28766A144586}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4AE7BD-4451-458C-B909-28766A144586}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4AE7BD-4451-458C-B909-28766A144586}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0118995-C889-426A-AB4B-C156CD7CA772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0118995-C889-426A-AB4B-C156CD7CA772}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0118995-C889-426A-AB4B-C156CD7CA772}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0118995-C889-426A-AB4B-C156CD7CA772}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82D62D62-1CF6-4929-934B-32613C0E396F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82D62D62-1CF6-4929-934B-32613C0E396F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82D62D62-1CF6-4929-934B-32613C0E396F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82D62D62-1CF6-4929-934B-32613C0E396F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{78D859EA-3861-4109-BD9D-0EC9546FEA95} = {B927D13B-76DE-4B0D-9DCD-19FF142EEE59}
+		{CE69614D-40A6-40A9-B46C-CDCB3F436134} = {46F402B7-4FD8-463B-A080-9E73F41435FE}
+		{4C9D2E50-D1A9-4C9D-872A-46471FE8AE2C} = {8A1E8782-7C78-4D23-87B9-5A46739C4141}
+		{F34D9D95-5B40-454E-BB87-3C291C1554D6} = {F64C2D87-FF46-42AE-A2CB-4BDB4A00A59A}
+		{8F4AE7BD-4451-458C-B909-28766A144586} = {99F92355-53B1-40BD-8B4D-19703073B5B0}
+		{F0118995-C889-426A-AB4B-C156CD7CA772} = {99F92355-53B1-40BD-8B4D-19703073B5B0}
+		{82D62D62-1CF6-4929-934B-32613C0E396F} = {D8E9FECB-4DD8-40B3-8D95-0AEEB1498529}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34F29234-3315-4F0B-9E3E-0B6BB43ED006}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Puc.Diario.Presentation.props" />
+</Project>

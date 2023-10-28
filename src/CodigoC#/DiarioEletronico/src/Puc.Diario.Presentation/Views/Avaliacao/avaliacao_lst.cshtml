@@ -1,0 +1,192 @@
+﻿@model List<Puc.Diario.Domain.Models.Avaliacao.Atividade>
+@{
+    ViewData["Title"] = "List of Alunos";
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+    <div class="container col-md-12 m-0 colDataTable">
+        <table class="table table-bordered table-hover table w-100" id="atividadesTable">
+            <thead class="thead-light">
+                <tr>
+                    <th class="d-none">#orderOnly</th>
+                    <th>Id </th>
+                    <th>Descrição</th>
+                    <th>Matéria</th>
+                    <th>Bimestre</th>
+                    <th>Turma</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script type="text/javascript">
+
+    function LoadRegistroAtv(id) {
+        if (id > 0) {
+            var params = {};
+            params.idAtividade = id;
+            params.flEdit = false;
+            OpenDynamicModal('@Url.Content("~/Avaliacao/Register")', params, '#registry-mainregister-modal', 800);
+        } else {
+            var params = {};
+            params.id = id;
+            params.flEdit = true;
+            OpenDynamicModal('@Url.Content("~/Avaliacao/Register")', params, '#registry-mainregister-modal', 800);
+        }
+    }
+
+
+    $(document).ready(function () {
+        ShowModalLoading();
+        $('#atividadesTable').DataTable({
+            dom: '<"datatable-header"fB><"datatable-scroll"t><"datatable-footer"ipl>',
+            language: {
+                search: "",
+                searchPlaceholder: "Digite Aqui...",
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                infoEmpty: "Nenhum registro encontrado.",
+                zeroRecords: "Nenhum registro encontrado.",
+                loadingRecords: "Carregando...",
+                lengthMenu: "Exibir: _MENU_"
+            },
+            ordering: true,
+            order: [[0, 'desc']],
+            columnDefs: [
+                {
+                    orderData: [0],
+                    targets: 1
+                }
+            ],
+            ajax: {
+                url: "/Avaliacao/GetAtividadesLista",
+                dataSrc: "data"
+            },
+            columns: [
+                {
+                    width: '0%', //COLLUMN PERCENTUAL WIDTH
+                    data:
+                        function (row,
+                            type,
+                            set,
+                            meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)
+                            return row.idAtividade;
+                        },
+                    className: 'text-center d-none' //COLUMN CUSTOM CSS
+                },
+                {
+                    width: '8%', //ID
+                    data: function (row, type, set, meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)
+                        var content = "<a href=\"javascript:void(0);\" class=\"data-export text-blue text-bold\" onclick=\"LoadRegistroAtv(" + row.idAtividade + ")\">ATV-" + row.idAtividade + "</a>";
+                        return content;
+                    },
+                    className: 'd-none d-md-table-cell text-center'
+                },
+                {
+                    //DESCRICAO
+                    data: function (row, type, set, meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)                       
+                        var content = "<div >" + row.descricaoAtv + "</div>";
+                        return content;
+                    },
+                    className: 'd-none d-md-table-cell'
+                },
+                {
+                    width: '15%',//MATERIA
+                    data: function (row, type, set, meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)                       
+                        var content = "<div id=" + row.idMateria + ">" + row.materia + "</div>";
+                        return content;
+                    },
+                    className: 'd-none d-md-table-cell text-center'
+                },
+                {
+                     width: '15%',//BIMESTRE
+                    data: function (row, type, set, meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)                        
+                        var content = "<div id=" + row.bimestre + ">" + row.bimestre + "</div>";
+                        return content;
+                    },
+                    className: 'd-none d-md-table-cell text-center'
+                },//TURMA
+                { width: '15%', data: "turma", className:'text-center' },
+                {
+                    width: '5%', //STATUS
+                    data: function (row, type, set, meta) { //COLUMN CUSTOM DATA (DIFFERENT FORMATS FOR EACH DATATABLE FUNCTION)
+                        var status = row.status == true || row.status == "true" ? "<span class=\"badge badge-success w-100\"><p class=\"p-1 m-0\">Avaliado</p></span>" : "<span class=\"badge badge-warning w-100\"><p class=\"p-1 m-0\"  style=\"color:white;\">Em avaliação</p></span>";
+                        
+                        var content = "<div class=\"data-export\" onClick=\"console.log('CLIQUEI')\">" + status + "</div>";                       
+                        return content;
+                    },
+                    className: 'd-none d-md-table-cell'
+                },
+            ],
+            initComplete: function () {
+                HideModalLoading();
+                console.log("Sorting settings:", this.api().order());
+                $('.dt-buttons').addClass('d-none d-md-block');
+                $('.dataTables_filter').find('span').addClass('d-none d-md-block');
+                $('.dataTables_filter').addClass('text');
+                $('.dataTables_filter').prepend('<button class="dt-button btn btn-dark mr-1" tabindex="0" type="button" onclick="OpenDynamicModal(\'@Url.Content("~/Avaliacao/Register")\', null, \'#registry-mainregister-modal\', 800);"><span><i class="fas fa-plus"></i></span></button>');
+                $('.dataTables_filter').find('input[type="search"]').attr({ 'name': 'txtSearch' });
+
+                if (window.innerWidth < 768)
+                    $('.dataTables_filter').find('input[type="search"]').css('width', '115px');
+
+                var timer;
+                var lastSearch;
+                $(".dataTables_filter input")
+                    .off("keyup input")
+                    .bind("input").on("keyup",
+                        function (e) {
+                            if (e.keyCode == 13) {
+                                clearTimeout(timer)
+                                table.search(this.value).draw();
+                                return
+                            }
+
+                            if (this.value == "" || (this.value.length >= 3 && lastSearch != this.value)) {
+                                clearTimeout(timer)
+                                timer = setTimeout(() => {
+                                    lastSearch = this.value
+                                    table.search(this.value).draw()
+                                },
+                                    500);
+                            }
+
+                            return;
+                        });
+
+                $('#atividadesTable').on('draw.dt', function () {
+                    HideModalLoading();
+                });
+
+                $('#atividadesTable').on('page.dt', function () {
+                    ShowModalLoading();
+                });
+
+                $('#atividadesTable').on('length.dt', function () {
+                    ShowModalLoading();
+                });
+
+                $('#atividadesTable').on('search.dt', function () {
+                    $('.dataTables_filter').find('input[type="search"]').blur();
+                    ShowModalLoading();
+                });
+
+            }
+        }).on('init.dt', function (e, settings, processing) {
+            $('.colDataTable').fadeIn();
+            HideModalLoading();
+        });
+    });
+
+</script>
+</html>

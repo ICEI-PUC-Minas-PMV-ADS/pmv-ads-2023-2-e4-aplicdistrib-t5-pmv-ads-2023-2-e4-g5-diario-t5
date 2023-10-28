@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Puc.Diario.ApiData\Puc.Diario.ApiData.csproj" />
+    <ProjectReference Include="..\Puc.Diario.Domain\Puc.Diario.Domain.csproj" />
+    <ProjectReference Include="..\Puc.Diario.Infra\Puc.Diario.Infra.csproj" />
+  </ItemGroup>
+
+</Project>

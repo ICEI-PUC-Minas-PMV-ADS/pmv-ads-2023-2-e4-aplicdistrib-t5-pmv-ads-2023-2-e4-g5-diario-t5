@@ -1,0 +1,341 @@
+﻿@model Puc.Diario.Domain.Models.Alunos.Aluno
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = null;
+    var teste = ViewBag.AnoCombo;
+    var ano = Model.Ano;
+    var flEdit = ViewBag.flEdit;
+    var msg = (Model.Status == true ? "Tem certeza que deseja inativar?" : "Tem certeza que deseja ativar?");
+    dynamic nivel;
+    bool outraPagina = ViewBag.outraPagina;
+}
+
+<div class="container">
+    <div class="card-body p-0">
+        <div class="row mb-0 bd-border bd-solid bd-dark-gray d-none d-md-flex">
+            <div class="col-4 col-md-4 d-flex justify-content-center align-items-center border border-solid bd-dark-gray border-right">
+                @if (flEdit)
+                {
+                    <span class="text-bolder">CADASTRO</span>
+                }else{
+                     <div class="row text-center">
+                        <span class="font-weight-bold">Data de Cadastro</span>
+                        <span>@Model.DataAln.Date.ToString("dd/MM/yyyy")</span>
+                    </div>
+                }
+            </div>
+            <div class="col-4 col-md-4 d-flex justify-content-center align-items-center border border-solid bd-dark-gray border-right">
+                <h3 class="mb-0 font-weight-bold text-uppercase">ALUNO</h3>
+            </div>
+            <div class="col-4 col-md-4">
+                <div class="row mb-0 py-1 border border-solid bd-dark-gray border-bottom text-center">
+                    <label class="col-4 col-md-6 col-form-label font-weight-bold text-center">
+                       Número
+                    </label>
+                    <label class="col-8 col-md-6 col-form-label font-weight-bold text-left text-blue">
+                        <span class="text-blue">ALN-</span>@((Model.IdAluno == 0 ? "" : Model.IdAluno))
+                    </label>
+                </div>
+                <div class="row mb-0 py-1 border text-center">
+                    <label class="col-6 col-md-6 col-form-label font-weight-bold text-center">
+                        Status
+                    </label>
+                    <div class="col-4 col-md-6 align-self-center text-left mb-1">
+                        @if (Model.Status == true && Model.IdAluno > 0)
+                        {
+                            <span class="badge badge-success p-2" style="width:64%;">Ativo</span>
+                        }else{
+                            <span class="badge badge-danger p-2" style="width:64%;">Inativo</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+            <form method="post" id="frmRegAluno">
+                <input type="hidden" name="hdnIdAluno" id="hdnIdAluno" value="@((Model != null) ? Model.IdAluno : "")">
+                <input type="hidden" name="hdnNivel" id="hdnNivel" value="">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mt-2">
+                            <div>
+                                <label class="control-label fw-bolder">NOME</label>
+                            </div>
+                            @if(flEdit){
+                                <input type="text" class="form-control form-control-sm" name="txtName" id="txtName" value="@((Model != null) ? Model.Nome : "" )" maxlength="50" />
+                                <span asp-validation-for="Nome" class="text-danger"></span>                            
+                            }else{
+                                <label class="control-label">@Model.Nome</label>
+                            }
+                        </div>
+                   
+                        <div class="form-group">
+                            <div>
+                                <label class="control-label fw-bolder">IDADE</label>
+                            </div>
+                            @if(flEdit){
+                                <input type="number" class="form-control form-control-sm" name="txtIdade" id="txtIdade" value="@((Model != null) ? Model.Idade : "" )" maxlength="100" />
+                                <span asp-validation-for="Idade" class="text-danger"></span>
+                            }else{
+                                <label class="control-label">@Model.Idade</label>
+                             }
+                        </div>                      
+
+                        <div class="form-group">
+                                <div>
+                                    <label class="control-label fw-bolder">NIVEL ENSINO</label>
+                                </div>
+                                @if(flEdit){
+                                    <select  name="txtNivel" id="txtNivel" class="form-select form-control form-control-sm">
+                                        <option value="" >Selecione...</option>    
+                                        @foreach (var item in (SelectList)ViewBag.NivelCombo)
+                                        {
+                                            var sel = (item.Text == Model.NivelEnsino) ? "selected" : null;
+                                            <option value="@item.Value" selected="@sel">@item.Text</option>
+                                        }    
+                                    </select>
+                                @*<input type="text" class="form-control form-control-sm" name="txtNivel" id="txtNivel" value="@((Model != null) ? Model.NivelEnsino : "" )" maxlength="100" />*@
+                                    <span asp-validation-for="NivelEnsino" class="text-danger"></span>
+                                }
+                                else
+                                {
+                                    <label class="control-label">@Model.NivelEnsino</label>
+                                } 
+                        </div>
+                        <div class="endereco">
+                            <div>
+                                <label class="control-label fw-bolder">TURMA</label>
+                            </div>
+                            @if (flEdit)
+                            {
+                                <select  name="txtTurma" id="txtTurma" class="form-select form-control form-control-sm">
+                                    <option value="" >Selecione...</option>
+                                    @foreach (var item in (SelectList)ViewBag.Turma)
+                                    {
+                                        var sel = (item.Value == Model.Turma.ToString()) ? "selected" : null;
+                                        <option value="@item.Value" selected="@sel">@item.Text</option>
+                                    }       
+                                </select>
+                            @*<input type="text" class="form-control form-control-sm" name="txtTurma" id="txtTurma" value="@((Model != null && Model.Turma > 0) ? Model.Turma : "" )" maxlength="11" />*@
+                                <span asp-validation-for="Turma" class="text-danger"></span>
+                            }
+                            else
+                            {
+                            <label class="control-label">@(Model.Turma != null ? Model.Turma : "-")</label>
+                            }              
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mt-2">
+                            <div>
+                                <label class="control-label fw-bolder">SOBRENOME</label>
+                            </div>
+                            @if (flEdit)
+                            {
+                                <input type="text" class="form-control form-control-sm" name="txtSobrenome" id="txtSobrenome" value="@((Model != null) ? Model.Sobrenome : "" )" maxlength="100" />
+                                <span asp-validation-for="Sobrenome" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <label class="control-label">@Model.Sobrenome</label>
+                            }                                          
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label class="control-label fw-bolder">CPF</label>
+                            </div>
+                            @if (flEdit)
+                            {
+                                <input type="text" class="form-control form-control-sm" name="txtCpf" id="txtCpf" value="@((Model != null) ? Model.Cpf : "" )" maxlength="11" />
+                                <span asp-validation-for="Cpf" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <label class="control-label">@(Model.Cpf != null ? Model.Cpf : "-")</label>
+                            }                         
+                           
+                        </div>
+                        <div class="form-group">
+                             <div class="form-group">
+                                <div>
+                                    <label class="control-label form-label fw-bolder">ANO</label>
+                                </div>
+                                @if (flEdit)
+                                {
+                                    <select name="txtAno" id="txtAno" class="form-select form-control form-control-sm"></select>
+                                    <span asp-validation-for="Ano" class="text-danger"></span>
+                                    @* <input type="number" class="form-control form-control-sm" name="txtAno" id="txtAno" value="@((Model != null) ? Model.Ano : "" )" maxlength="100" />*@
+                                }
+                                else
+                                {
+                                    <label class="control-label">@Model.Ano</label>
+                                }
+                            </div>                                 
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="text-center p-4">
+                @if (!outraPagina)
+                {
+                    @if (flEdit)
+                    {
+                        <button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="SalvarRegistro(this);">
+                            @(
+                                (Model.IdAluno > 0 ? "Salvar" : "Incluir")
+                                )
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="EditarRegistro(this, @Model.IdAluno);">Editar</button>
+                        <button type="button" class="btn btn-dark btn-xs-only-block mb-1 mb-md-0 mr-1 my-1 my-lg-0" onClick="AlterarStatusRegistro(this, @Model.IdAluno, @((Model.Status == true ? 0 : 1)))">@((Model.Status == true ? "Inativar" : "Reativar"))</button>
+                    }
+                }
+           
+                <button id="closeBtn" class="btn btn-outline-success">Fechar</button>
+            </div>
+       
+    </div>
+</div>
+<script>
+    var outraPagina = '@outraPagina';
+    $('#closeBtn').click(function(){
+        if (outraPagina == 'True') {
+            CloseModalPopup();
+        }else{
+            CloseModal();
+        }
+    })
+    if('@flEdit'){
+        var anoSelecionado = '@Html.Raw(Model.Ano)';
+        updateDropdownAno("txtNivel", "txtAno", anoSelecionado);
+        document.getElementById("txtNivel").addEventListener("change", function(){
+            updateDropdownAno("txtNivel", "txtAno", anoSelecionado);
+        });
+    }
+
+    async function SalvarRegistro(btn) {
+        var form = $('#frmRegAluno');
+        var flNew = ($('#frmRegAluno').find('#hdnIdAluno').val() == '');
+
+        if ($(form).find('#txtName').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtName').focus(); }, 800);
+            }, true,  "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtIdade').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtIdade').focus(); }, 800);
+            }, true,  "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtAno').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtAno').focus(); }, 800);
+            }, true,  "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtTurma').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtTurma').focus(); }, 800);
+            }, true,  "OK");
+            return false;
+        }
+
+        if ($(form).find('#txtNivel').val() == '') {
+            ewcmSimpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtNivel').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+        if ($(form).find('#txtSobrenome').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtSobrenome').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+        if ($(form).find('#txtCpf').val() == '') {
+            simpleConfirm("Preencha o campo selecionado", 1, "Aviso", function () {
+                setTimeout(function () { $(form).find('#txtCpf').focus(); }, 800);
+            }, true, "OK");
+            return false;
+        }
+
+        $(btn).html("Carregando...");
+        $(btn).attr('disabled', 'disabled');
+
+        var formData = $(form).serialize();
+        console.log("PAYLOAD", formData);
+         $.ajax({
+            url: '@Url.Content("~/Alunos/Salvar")',
+            method: 'post',
+            cache: false,
+            data: formData,
+            success: function (result) {
+                HideModalLoading();
+                try {
+                    var table = $('#alunosTable').DataTable();
+                    table.ajax.reload();
+                    var params = {};
+                    params.idAluno = result.registro.idAluno;
+                    params.flEdit = false,
+                    OpenDynamicModal('@Url.Content("~/Alunos/Register")', params, '#registry-mainregister-modal', 800);
+
+                } catch (err) {
+
+                }
+            }
+        });
+    }
+
+    function EditarRegistro(btn, idAluno) {
+        var params = {};
+        params.idAluno = idAluno;
+        params.flEdit = true;
+
+        OpenDynamicModal('@Url.Content("~/Alunos/Register")', params, '#registry-mainregister-modal', 800);
+    }
+
+    function AlterarStatusRegistro(btn, idAluno, status) {
+        confirmYesNo('@msg', 2, "Confirmação", function (e) {
+            if (e) {
+                $(btn).html("Carregando...");
+                $(btn).attr('disabled', 'disabled');
+
+                $('#registry-mainregister-modal').modal('hide');
+                ShowModalLoading();
+                console.log(status)
+                $.ajax({
+                    url: '@Url.Content("~/Alunos/AtivarInativar")',
+                    method: 'put',
+                    cache: false,
+                    data: `idAluno=${idAluno}&status=${status}`,
+                    success: function (result) {
+                        HideModalLoading();
+                        try{
+                            var table = $('#alunosTable').DataTable();
+                            table.ajax.reload();
+                            var params = {};
+                            params.idAluno = result.registro.idAluno;
+                            params.flEdit = false,
+                            OpenDynamicModal('@Url.Content("~/Alunos/Register")', params, '#registry-mainregister-modal', 800);
+                        }catch(err){
+
+                        }
+                       
+                    }
+                });
+            }
+        }, "OK", "Cancelar");
+     }
+
+</script>

@@ -1,0 +1,12 @@
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\bin\Debug\net6.0\Puc.Diario.Infra.deps.json
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\bin\Debug\net6.0\Puc.Diario.Infra.dll
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\bin\Debug\net6.0\Puc.Diario.Infra.pdb
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.csproj.AssemblyReference.cache
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.GeneratedMSBuildEditorConfig.editorconfig
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.AssemblyInfoInputs.cache
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.AssemblyInfo.cs
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.csproj.CoreCompileInputs.cache
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.dll
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\refint\Puc.Diario.Infra.dll
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\Puc.Diario.Infra.pdb
+E:\ProjetoDiarioEletronico\DiarioEletronico\src\Puc.Diario.Infra\obj\Debug\net6.0\ref\Puc.Diario.Infra.dll
