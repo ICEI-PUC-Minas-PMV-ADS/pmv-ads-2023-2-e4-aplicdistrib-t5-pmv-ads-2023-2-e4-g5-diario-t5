@@ -22,7 +22,7 @@ As referências abaixo irão auxiliá-lo na geração do artefato “Diagramas d
 
 ## Wireframes
 
-[Figma](https://www.figma.com/file/FmPnfRiqyy4TL1lbXEmT2D/Diario-Eletronico?type=design&node-id=24-4&mode=design&t=bwIYeDKBpoLwKfvL-0)
+[Visualizar no Figma](https://www.figma.com/file/FmPnfRiqyy4TL1lbXEmT2D/Diario-Eletronico?type=design&node-id=24-4&mode=design&t=bwIYeDKBpoLwKfvL-0)
 
 ![image](https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2023-2-e4-aplicdistrib-t5-pmv-ads-2023-2-e4-g5-diario-t5/assets/95146268/d947cb39-850b-488d-aea4-006abad3e179)
  
