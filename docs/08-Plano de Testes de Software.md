@@ -20,13 +20,7 @@ Comente sobre as ferramentas de testes utilizadas.
 
 |*Caso de Teste      | *CT-01 – Cadastro de aluno            | 
 |------------------|-------------------------------|
-| Requisito Associado | RF-006 – Cadastrar informações dos alunos como nome, idade, nível de ensino, turma, Ano e outras informações relevantes.
-RF-007 – Permitir consultar alunos seguindo os critérios de nome, turma e ano.
-| 
+| Requisito Associado | RF-006 – Cadastrar informações dos alunos como nome, idade, nível de ensino, turma, Ano e outras informações relevantes. RF-007 – Permitir consultar alunos seguindo os critérios de nome, turma e ano.| 
 |Objetivo do Teste|Verificar se a escola conseguirá cadastrar os alunos com suas respectivas características dentro da aplicação “Diário Eletrônico” seguindo os critérios estabelecidos.| 
-|Passos   |1) Acessar a aplicação;
-2) Visualizar a tela de “Cadastro de Aluno”;
-3) Preencher os campos com as informações solicitadas; 
-4) Clicar em “incluir”.   
-| 
+|Passos   |1) Acessar a aplicação; 2) Visualizar a tela de “Cadastro de Aluno”; 3) Preencher os campos com as informações solicitadas; 4) Clicar em “incluir”.| 
 | Critério de Êxito| Verificar na aba “Lista de alunos” se o aluno foi adicionado com sucesso.| 
