@@ -1,12 +1,23 @@
 # Registro de Testes de Software
 
-<span style="color:red">Pré-requisitos: <a href="3-Projeto de Interface.md"> Projeto de Interface</a></span>, <a href="8-Plano de Testes de Software.md"> Plano de Testes de Software</a>
-
 Relatório com as evidências dos testes de software realizados no sistema pela equipe, baseado em um plano de testes pré-definido.
+
+|# Testes| # CT-01 – Cadastro de aluno|
+|Critérios de sucesso | Cadastro de aluno realizado com êxito|
+|Link da evidência em vídeo ou imagem| Vídeo anexo dentro da pasta "videos"|
+|Comentário| Teste concluido com sucesso|
+
+|# Testes| # CT-02 – Cadastro de atividades|
+|Critérios de sucesso | Cadastro de atividade realizado com êxito|
+|Link da evidência em vídeo ou imagem| Vídeo anexo dentro da pasta "videos"|
+|Comentário| Teste concluido com sucesso|
+
+|# Testes| # CT-03 – Cadastro de notas|
+|Critérios de sucesso | Cadastro de notas realizado com êxito|
+|Link da evidência em vídeo ou imagem| Vídeo anexo dentro da pasta "videos"|
+|Comentário| Teste concluido com sucesso|
+
 
 ## Avaliação
 
-Discorra sobre os resultados do teste. Ressaltando pontos fortes e fracos identificados na solução. Comente como o grupo pretende atacar esses pontos nas próximas iterações. Apresente as falhas detectadas e as melhorias geradas a partir dos resultados obtidos nos testes.
-
-> **Links Úteis**:
-> - [Ferramentas de Test para Java Script](https://geekflare.com/javascript-unit-testing/)
+Os testes da API foram realizados e concluidos com sucesso, sempre apresentando os resultados de maneira sólida e conforme o esperado, garantindo assim a qualidade de funcionamento esperada e adequada.
