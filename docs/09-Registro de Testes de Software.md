@@ -5,19 +5,19 @@ Relatório com as evidências dos testes de software realizados no sistema pela 
 |Testes      | CT-01 – Cadastro de aluno            | 
 |------------------|-------------------------------|
 | Critérios de sucesso | Cadastro de aluno realizado com êxito| 
-|Link da evidência em vídeo ou imagem| Evidência se encontra na pasta "videos"| 
+|Link da evidência em vídeo ou imagem| `Evidência se encontra na pasta "videos"`| 
 |Comentário |Teste concluido com sucesso| 
 
 |Testes      |CT-02 – Cadastro de atividades        | 
 |------------------|-------------------------------|
 | Critérios de sucesso | Cadastro de atividade realizado com êxito| 
-|Link da evidência em vídeo ou imagem|Evidência se encontra na pasta "videos"| 
+|Link da evidência em vídeo ou imagem|`Evidência se encontra na pasta "videos"`| 
 |Comentário |Teste concluido com sucesso| 
 
 |Testes      |CT-03 – Cadastro de notas       | 
 |------------------|-------------------------------|
 | Critérios de sucesso | Cadastro de notas realizado com êxitoc| 
-|Link da evidência em vídeo ou imagem|Evidência se encontra na pasta "videos"| 
+|Link da evidência em vídeo ou imagem|`Evidência se encontra na pasta "videos"`| 
 |Comentário |Teste concluido com sucesso| 
 
 
