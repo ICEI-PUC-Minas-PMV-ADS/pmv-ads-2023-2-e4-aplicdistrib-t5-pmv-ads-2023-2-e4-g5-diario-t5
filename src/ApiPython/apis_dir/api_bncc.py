@@ -17,17 +17,6 @@ data_for_connection = (
 connection = pyodbc.connect(data_for_connection)
 cursor = connection.cursor()
 
-
-print("Abra o navegador e digite /apibncc após seu localhost")
-
-show_table_names = cursor.execute(f"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES \
-                                  WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='bncc'")
-table_names = show_table_names.fetchall()
-
-for x in table_names:
-    print(x)
-
-
 @app.route('/apibncc/<subject>', methods=["GET"])
 @app.route('/apibncc/<subject>/<grade>', methods = ["GET"])
 def list_all(subject, grade = None):
@@ -596,7 +585,65 @@ def list_all_two():
                         "area": x[2]
                     })
                 return jsonify(message = "Dados solicitados", data = em_competencias_list)
+            
+@app.route('/apibncc/habilidades/', methods = ["GET"])
+def list_all_three():
+    """Lista todo as habilidades por matéria e ano via query string"""
+    subject = request.args.get('materia', None, type= str)
+    grade = request.args.get('ano', None, type = str)
+                          
     
+    if len(grade) > 0 and len(subject) > 0:      
+        db = cursor.execute(f"""SELECT habilidades
+                                FROM {subject} where {grade} = 'true'""")
+        data_get = db.fetchall()
+        data_show = []
+        if subject == "bncc_lingua_portuguesa_ef":
+            pl_list = []
+            for x in data_get:
+                pl_list.append({
+                'habilidades': x[0],
+            })
+            return jsonify(message = "Dados solicitados", data = pl_list)
+        elif subject == "bncc_lingua_inglesa_ef":
+            eng_list = []
+            for x in data_get:
+                eng_list.append({
+                    'habilidades': x[0]
+            
+            })
+            return jsonify(message = "dados", data = eng_list)
+        elif subject.endswith("_ef") and subject not in ["bncc_lingua_portuguesa_ef", "bncc_lingua_inglesa_ef"]:
+            for x in data_get:
+                data_show.append({                   
+        'habilidades': x[0]
+                
+            })
+            return jsonify(message= "dados", data = data_show)
+        
+        elif subject.endswith("_em") and not subject.startswith("c"):
+            em_list = []
+            db = cursor.execute(f"""SELECT habilidades
+                            FROM {subject} where {grade} = 'true'""")
+            for x in data_get:
+                em_list.append({                   
+                  'habilidades': x[0]
+                })
+            return jsonify(message = "Dados de df_habilidades_em", data = em_list)
+        elif subject.endswith("_em") and subject.startswith("c"):
+            em_competencias_list = []
+            db = cursor.execute(f"""SELECT habilidades
+                            FROM {subject} where {grade} = 'true'""")
+            for x in data_get:
+                em_competencias_list.append({
+                  'habilidades': x[0]
+                })
+            return jsonify(message = "Dados solicitados", data = em_competencias_list)
+
+
+
+
+
 app.run(debug=True)
    
 
