@@ -55,7 +55,7 @@
 |------------------|-------------------------------|
 |A aplicação deverá conter uma tela de login para acesso a aplicação.| 
 |![image](img/Funcionalidades/Mobile (3).jpeg)|
-|![image](docs/img/Funcionalidades/Mobile (2).jpeg)|
+|![image](img/Funcionalidades/Frequencia.png)|
 |![image](img/Funcionalidades/Mobile (4).jpeg)|
 |![image](img/Funcionalidades/Mobile (5).jpeg)|
 || 
