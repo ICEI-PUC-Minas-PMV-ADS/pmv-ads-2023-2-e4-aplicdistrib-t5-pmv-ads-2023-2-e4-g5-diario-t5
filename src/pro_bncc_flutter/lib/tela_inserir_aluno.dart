@@ -25,18 +25,16 @@ class _InsertStudentsState extends State<InsertStudents> {
         "sobrenome": sobrenomeController.text,
         "idade": int.parse(idadeController.text),
         "ano": anoController.text,
-        "nivel_ensino": "ef", // ajuste conforme necessário
-        "cpf": "123456789", // ajuste conforme necessário
+        "nivel_ensino": "ef",
+        "cpf": "123456789",
         "id_turma": int.parse(turmaController.text),
       }),
     );
 
     if (response.statusCode == 201) {
-      // Inserção bem-sucedida, você pode tratar a resposta aqui
       print('Aluno inserido com sucesso');
       print(response.body);
     } else {
-      // Algo deu errado ao inserir o aluno
       print('Erro ao inserir aluno: ${response.statusCode}');
       print(response.body);
     }
