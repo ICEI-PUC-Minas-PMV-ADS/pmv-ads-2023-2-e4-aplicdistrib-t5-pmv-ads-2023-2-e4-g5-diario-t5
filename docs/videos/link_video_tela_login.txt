@@ -1,4 +1,3 @@
 Vídeo que mostra a tela de login e cadastro com o firebase:
 
-https://www.loom.com/share/acbdfecb921b4884962fb87902796cc5
-
+https://www.loom.com/share/137763116e80491aa6a13c9dcdc8d33f?sid=d1af6d6c-d67b-4f5d-9e75-5157f17c88ee
