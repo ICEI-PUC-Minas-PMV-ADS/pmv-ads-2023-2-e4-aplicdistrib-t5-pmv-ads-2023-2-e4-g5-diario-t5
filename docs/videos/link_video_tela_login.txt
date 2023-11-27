@@ -1,3 +1,7 @@
 Vídeo que mostra a tela de login e cadastro com o firebase:
 
 https://www.loom.com/share/137763116e80491aa6a13c9dcdc8d33f?sid=d1af6d6c-d67b-4f5d-9e75-5157f17c88ee
+
+Vídeo que mostra um método Get de visualização de turmas:
+
+https://www.loom.com/share/6738798c27fa43a7aeb9107f49c3c8ca
