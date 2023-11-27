@@ -10,11 +10,10 @@ Diante dos cenários apresentados e analisando os requisitos do projeto, foi rea
 
 |*Caso de Teste      | * CT-02 – Login           | 
 |------------------|-------------------------------|
-| Requisito Associado RF-002 - O aplicativo deverá conter uma tela de login para acessar o aplicativo. | 
+| Requisito Associado | RF-002 - O aplicativo deverá conter uma tela de login para acessar o aplicativo. | 
 |Objetivo do Teste| Verificar se o usuário consegue fazer o Login corretamente na aplicação após realização do cadastro. | 
 |Passos   |1) Acesse a aplicação; 2) Visualizar a tela de “Login”; 3) Preencher os campos com as informações solicitadas de login e senha; 4) Clique em “Entrar”. | 
-| Critério de Êxito| - Verificar se o login foi realizado com sucesso. - O login e senha cadastrada devem direcionar o usuário para a tela home da aplicação. 
-- Login e/ou senha incorretas devem exibir uma mensagem de “Usuário e/ou senha incorreto(s)”. |
+| Critério de Êxito| - Verificar se o login foi realizado com sucesso. - O login e senha cadastrada devem direcionar o usuário para a tela home da aplicação. - Login e/ou senha incorretas devem exibir uma mensagem de “Usuário e/ou senha incorreto(s)”. |
 
 |*Caso de Teste      | *CT-03 – Cadastro de aluno            | 
 |------------------|-------------------------------|
