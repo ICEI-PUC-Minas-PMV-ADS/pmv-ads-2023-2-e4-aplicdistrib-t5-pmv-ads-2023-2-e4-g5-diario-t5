@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "158919156044",
+    "project_id": "diario-eletronico-bncc",
+    "storage_bucket": "diario-eletronico-bncc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158919156044:android:1640e0fbfae64f5e8eafe9",
+        "android_client_info": {
+          "package_name": "com.example.pro_bncc_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXLgAE0tzCKr9cioucG8ERLC5bIgzbYrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
