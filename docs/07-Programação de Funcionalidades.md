@@ -40,3 +40,28 @@
 |Permitir que os professores registrem presença ou falta de alunos em cada aula.| 
 |![image](img/Funcionalidades/Frequencia.png)|
 || 
+
+---
+|Funcionalidade    | RF-001        | 
+|------------------|-------------------------------|
+|A aplicação deverá conter uma tela de cadastro para acesso a aplicação.| 
+|![image](img/Funcionalidades/Mobile_1.png)|
+|![image](img/Funcionalidades/Mobile_2.png)|
+|![image](img/Funcionalidades/Mobile_3.png)|
+|| 
+
+---
+|Funcionalidade    | RF-002        | 
+|------------------|-------------------------------|
+|A aplicação deverá conter uma tela de login para acesso a aplicação.| 
+|![image](img/Funcionalidades/Mobile_4.png)|
+|![image](img/Funcionalidades/Mobile_5.png)|
+|![image](img/Funcionalidades/Mobile_6.png)|
+|| 
+
+---
+|Funcionalidade    | RF-007        | 
+|------------------|-------------------------------|
+|Permitir consultar alunos seguindo os critérios de nome, turma e ano.| 
+|![image](img/Funcionalidades/Mobile_7.png)|
+|| 
