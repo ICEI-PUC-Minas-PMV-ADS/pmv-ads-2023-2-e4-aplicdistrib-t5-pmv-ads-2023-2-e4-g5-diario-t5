@@ -1,0 +1,26 @@
+message: Please cite this software using these metadata.
+title: DIÁRIO ELETRÔNICO
+authors:
+  - family-names:  Alves Oliveira
+    given-names: Gustavo 
+  - family-names:  Carlos da Costa Júnior
+    given-names: José 
+  - family-names:  Bernardino Ribeiro Filho
+    given-names: Jefferson
+  - family-names: Magalhães Ribeiro
+    given-names: Alexandre 
+  - family-names: Fernandes Silva Medeiros
+    given-names: Crislaine 
+  - family-names:  Campos Xavier
+    given-names: Bianca 
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Cipriano da Silva
+    given-names: Wagner 
+keywords:
+  - Diario eletronico
+  - Educação
+  - BNCC
+repository-code: https://github.com/ICEI-PUC-Minas-PMV-ADS/pmv-ads-2023-2-e4-aplicdistrib-t5-pmv-ads-2023-2-e4-g5-diario-t5
+version: 1.0.0
+date-released: 2023-08-17
